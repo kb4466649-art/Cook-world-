@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ═══ PRIMARY SEO ═══ -->
+<title>CookWorld – Global Cooking Videos | Indian & World Recipes</title>
+<meta name="description" content="Discover the best cooking videos from India and around the world. Watch Punjabi, South Indian, Bengali, Gujarati, Italian, Chinese recipes and more. Order ingredients instantly via Blinkit, Zepto, Amazon.">
+<meta name="keywords" content="cooking videos, Indian recipes, South Indian cooking, Punjabi recipes, Bengali recipes, Gujarati recipes, Kerala recipes, Tamil recipes, Hyderabadi biryani, street food India, Italian cooking, Chinese recipes, cooking tutorials YouTube, online cooking, recipe videos, order ingredients online">
+<meta name="author" content="CookWorld">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cookworld.vercel.app/">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+<!-- ═══ OPEN GRAPH (Facebook, WhatsApp) ═══ -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cookworld.vercel.app/">
+<meta property="og:title" content="CookWorld – Watch & Cook Global Recipes">
+<meta property="og:description" content="Discover cooking videos from India and around the world. Filter by region and language. Order ingredients in minutes via Blinkit, Zepto, Amazon and more.">
+<meta property="og:image" content="https://cookworld.vercel.app/og-image.jpg">
+<meta property="og:site_name" content="CookWorld">
+<meta property="og:locale" content="en_IN">
+
+<!-- ═══ TWITTER CARD ═══ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CookWorld – Global Cooking Videos">
+<meta name="twitter:description" content="Watch Indian & world cooking videos. Order ingredients instantly.">
+<meta name="twitter:image" content="https://cookworld.vercel.app/og-image.jpg">
+
+<!-- ═══ STRUCTURED DATA – WebSite ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CookWorld",
+  "url": "https://cookworld.vercel.app/",
+  "description": "Discover cooking videos from India and around the world. Watch recipes by region and language. Order ingredients instantly.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://cookworld.vercel.app/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- ═══ STRUCTURED DATA – VideoGallery ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "CookWorld – Global Cooking Video Collection",
+  "description": "Curated cooking videos from top YouTube chefs worldwide. Indian regional cuisines, international recipes, street food and more.",
+  "url": "https://cookworld.vercel.app/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CookWorld",
+    "url": "https://cookworld.vercel.app/"
+  },
+  "about": [
+    {"@type": "Thing", "name": "Indian Cooking"},
+    {"@type": "Thing", "name": "Cooking Recipes"},
+    {"@type": "Thing", "name": "Food Videos"},
+    {"@type": "Thing", "name": "South Indian Cuisine"},
+    {"@type": "Thing", "name": "Punjabi Cuisine"},
+    {"@type": "Thing", "name": "Street Food"}
+  ]
+}
+</script>
+
+<!-- ═══ STRUCTURED DATA – BreadcrumbList ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://cookworld.vercel.app/"},
+    {"@type": "ListItem", "position": 2, "name": "Indian Recipes", "item": "https://cookworld.vercel.app/?q=Indian"},
+    {"@type": "ListItem", "position": 3, "name": "World Recipes", "item": "https://cookworld.vercel.app/?q=World"}
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0e0c; --surface:#1a1814; --surface2:#242018;
+  --accent:#e8a045; --accent2:#c45c2a;
+  --text:#f0ebe3; --muted:#8a8070; --border:#2e2a22; --card-bg:#1e1c18;
+  --green:#2ecc71; --red:#e74c3c;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;transition:background 0.3s;}
+nav.scrolled{background:rgba(15,14,12,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--accent);cursor:pointer;}
+.logo span{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:1.2rem;}
+.nav-search{position:relative;}
+.nav-search input{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;padding:0.45rem 1rem 0.45rem 2.2rem;outline:none;width:220px;transition:all 0.2s;}
+.nav-search input:focus{border-color:var(--accent);width:280px;}
+.nav-search input::placeholder{color:var(--muted);}
+.nav-search-icon{position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.8rem;pointer-events:none;}
+
+/* HERO */
+.hero{position:relative;height:80vh;min-height:480px;max-height:680px;display:flex;align-items:flex-end;padding:0 3rem 3.5rem;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#2a1f0f 0%,#1a1814 40%,#0f1615 100%);}
+.hero-pattern{position:absolute;inset:0;opacity:0.04;background-image:radial-gradient(circle,var(--accent) 1px,transparent 1px);background-size:32px 32px;}
+.hero-glow{position:absolute;top:-100px;right:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(232,160,69,0.1) 0%,transparent 65%);pointer-events:none;}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,14,12,1) 0%,rgba(15,14,12,0.6) 40%,rgba(15,14,12,0.1) 100%);}
+.hero-content{position:relative;z-index:2;max-width:560px;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent);color:#0f0e0c;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:4px;margin-bottom:1rem;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;margin-bottom:0.9rem;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-desc{color:rgba(240,235,227,0.7);font-size:1rem;line-height:1.65;margin-bottom:2rem;max-width:420px;}
+.hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.btn-primary{display:flex;align-items:center;gap:0.5rem;background:var(--accent);color:#0f0e0c;border:none;border-radius:8px;padding:0.75rem 1.6rem;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{background:#f0b055;transform:scale(1.02);}
+.btn-ghost{display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.1);color:var(--text);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:0.75rem 1.6rem;font-weight:600;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;transition:all 0.2s;}
+.btn-ghost:hover{background:rgba(255,255,255,0.16);}
+
+/* SETUP */
+.setup-bar{background:rgba(232,160,69,0.07);border-bottom:1px solid rgba(232,160,69,0.2);padding:0.9rem 3rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.setup-bar label{color:var(--accent);font-size:0.85rem;font-weight:600;white-space:nowrap;}
+.setup-bar input{flex:1;min-width:200px;max-width:340px;padding:0.5rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;}
+.setup-bar input:focus{border-color:var(--accent);}
+.setup-bar .hint{color:var(--muted);font-size:0.75rem;}
+.setup-bar .hint a{color:var(--accent);}
+.btn-sm{padding:0.5rem 1.2rem;background:var(--accent);color:#0f0e0c;border:none;border-radius:6px;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;white-space:nowrap;}
+.btn-sm.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+
+/* GENRE */
+.genre-row{padding:1.5rem 3rem 0;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;}
+.genre-pill{padding:0.35rem 1rem;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.83rem;font-weight:500;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+.genre-pill:hover{border-color:rgba(232,160,69,0.5);color:var(--text);}
+.genre-pill.active{background:var(--accent);color:#0f0e0c;border-color:var(--accent);font-weight:700;}
+.genre-divider{width:1px;height:20px;background:var(--border);margin:0 0.3rem;}
+.lang-select{margin-left:auto;padding:0.35rem 1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.83rem;cursor:pointer;outline:none;}
+
+/* AD */
+.ad-slot{margin:1.5rem 3rem;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;height:80px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:0.8rem;}
+
+/* SECTION */
+.section{padding:0 3rem;margin-bottom:2.5rem;}
+.section-head{display:flex;align-items:baseline;gap:0.75rem;margin-bottom:1rem;}
+.section-label{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;}
+.section-sub{font-size:0.78rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+
+/* SHELF */
+.shelf{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:0.75rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.shelf::-webkit-scrollbar{height:4px;}
+.shelf::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+/* NF CARD */
+.nf-card{flex-shrink:0;width:220px;border-radius:10px;overflow:hidden;background:var(--card-bg);cursor:pointer;position:relative;transition:transform 0.28s cubic-bezier(.34,1.56,.64,1),box-shadow 0.28s;animation:fadeUp 0.4s ease both;}
+.nf-card:hover{transform:scale(1.08) translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 0 1.5px var(--accent);z-index:10;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.nf-thumb{position:relative;aspect-ratio:16/9;background:var(--surface2);overflow:hidden;}
+.nf-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.35s;}
+.nf-card:hover .nf-thumb img{transform:scale(1.06);}
+.nf-duration{position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,0.85);color:#fff;font-size:0.7rem;font-weight:600;padding:2px 5px;border-radius:3px;}
+.nf-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,14,12,0.95) 0%,rgba(15,14,12,0.2) 60%,transparent 100%);opacity:0;transition:opacity 0.25s;display:flex;flex-direction:column;justify-content:flex-end;padding:0.75rem;gap:0.4rem;}
+.nf-card:hover .nf-overlay{opacity:1;}
+.nf-overlay-play{width:36px;height:36px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;align-self:flex-start;}
+.nf-overlay-title{font-size:0.78rem;font-weight:600;line-height:1.3;color:#fff;}
+.nf-overlay-meta{display:flex;gap:0.4rem;align-items:center;}
+.nf-tag{padding:1px 6px;border-radius:3px;font-size:0.65rem;font-weight:600;background:rgba(232,160,69,0.2);color:var(--accent);border:1px solid rgba(232,160,69,0.3);}
+.nf-views{font-size:0.65rem;color:rgba(255,255,255,0.5);}
+.nf-info{padding:0.6rem 0.75rem 0.75rem;}
+.nf-title{font-size:0.82rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:0.3rem;}
+.nf-channel{font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:0.3rem;}
+.nf-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;padding:0 3rem 4rem;}
+.loading-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted);}
+.spinner{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 1rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted);}
+
+/* ══════════════════════════════════
+   MODAL — full immersive experience
+   ══════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;backdrop-filter:blur(8px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border-radius:20px;border:1px solid var(--border);width:100%;max-width:960px;overflow:hidden;animation:modalIn 0.3s ease;margin:auto;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.93) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+/* Video */
+.modal-video{aspect-ratio:16/9;background:#000;}
+.modal-video iframe{width:100%;height:100%;border:none;}
+
+/* Info row */
+.modal-info{padding:1.25rem 1.5rem 0.75rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
+.modal-left{flex:1;}
+.modal-title{font-size:1.1rem;font-weight:700;line-height:1.4;margin-bottom:0.4rem;}
+.modal-meta-row{display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;}
+.modal-channel{color:var(--muted);font-size:0.85rem;}
+.yt-link{display:inline-flex;align-items:center;gap:0.35rem;padding:0.3rem 0.85rem;background:#ff0000;color:#fff;border-radius:50px;text-decoration:none;font-size:0.75rem;font-weight:700;}
+.modal-close{width:36px;height:36px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;color:var(--text);font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s;}
+.modal-close:hover{background:rgba(232,160,69,0.15);border-color:var(--accent);}
+
+/* ── AI INGREDIENT PANEL ── */
+.ingredient-panel{margin:0 1.5rem 1.5rem;background:var(--surface2);border-radius:16px;border:1px solid var(--border);overflow:hidden;}
+
+.ingredient-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border);}
+.ingredient-header-left{display:flex;align-items:center;gap:0.6rem;}
+.ai-badge{display:inline-flex;align-items:center;gap:0.35rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0f0e0c;font-size:0.68rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:50px;}
+.dish-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);}
+.dish-cuisine-tag{padding:0.2rem 0.7rem;background:rgba(232,160,69,0.12);border:1px solid rgba(232,160,69,0.25);border-radius:50px;font-size:0.72rem;color:var(--accent);font-weight:600;}
+
+/* Ingredient chips */
+.ingredients-scroll{display:flex;gap:0.75rem;padding:1.1rem 1.25rem;overflow-x:auto;scrollbar-width:none;}
+.ingredients-scroll::-webkit-scrollbar{display:none;}
+
+.ingredient-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0.4rem;cursor:pointer;transition:transform 0.2s;}
+.ingredient-chip:hover{transform:translateY(-3px);}
+.ing-icon-wrap{width:64px;height:64px;border-radius:16px;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;transition:border-color 0.2s,box-shadow 0.2s;position:relative;}
+.ingredient-chip:hover .ing-icon-wrap{border-color:var(--accent);box-shadow:0 4px 20px rgba(232,160,69,0.2);}
+.ing-label{font-size:0.68rem;color:var(--muted);font-weight:500;text-align:center;max-width:70px;line-height:1.2;}
+
+/* Store section */
+.store-section{padding:0 1.25rem 1.25rem;}
+.store-section-title{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.75rem;}
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.6rem;}
+
+.store-card{display:flex;align-items:center;gap:0.6rem;padding:0.65rem 0.85rem;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);text-decoration:none;transition:all 0.2s;cursor:pointer;}
+.store-card:hover{border-color:var(--accent);background:rgba(232,160,69,0.06);transform:translateY(-2px);}
+.store-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.store-info{flex:1;min-width:0;}
+.store-name{font-size:0.78rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.store-time{font-size:0.65rem;color:var(--muted);}
+.store-commission{font-size:0.6rem;color:var(--green);font-weight:600;}
+.store-arrow{color:var(--muted);font-size:0.75rem;}
+
+/* AI loading state */
+.ai-loading{display:flex;align-items:center;gap:0.75rem;padding:1.5rem 1.25rem;color:var(--muted);font-size:0.85rem;}
+.ai-dots{display:flex;gap:4px;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:aiPulse 1.2s ease infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}
+.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
+
+/* Order strip */
+.order-strip{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem;background:linear-gradient(135deg,rgba(232,160,69,0.1),rgba(196,92,42,0.08));border-top:1px solid rgba(232,160,69,0.15);}
+.order-strip-text{font-size:0.82rem;color:var(--text);font-weight:500;}
+.order-strip-text span{color:var(--accent);font-weight:700;}
+.order-all-btn{display:flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--accent);color:#0f0e0c;border:none;border-radius:8px;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;transition:all 0.2s;}
+.order-all-btn:hover{background:#f0b055;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent);font-weight:900;}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{color:var(--muted);font-size:0.82rem;text-decoration:none;}
+.footer-links a:hover{color:var(--accent);}
+.footer-copy{color:var(--muted);font-size:0.78rem;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 1.25rem;}
+  .hero{padding:0 1.25rem 2.5rem;}
+  .genre-row{padding:1.25rem 1.25rem 0;}
+  .section{padding:0 1.25rem;}
+  .main-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:0 1.25rem 3rem;gap:0.75rem;}
+  .setup-bar{padding:0.9rem 1.25rem;}
+  .ad-slot{margin:1rem 1.25rem;}
+  footer{padding:1.5rem 1.25rem;}
+  .nf-card{width:165px;}
+  .modal-box{border-radius:12px;}
+  .store-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo" onclick="resetHome()">Cook<span>World</span></div>
+  <div class="nav-right">
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="text" id="navSearch" placeholder="Search recipes…" onkeydown="if(event.key==='Enter')doSearch(this.value)">
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-pattern"></div>
+  <div class="hero-glow"></div><div class="hero-gradient"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🍳 Global Kitchen</div>
+    <h1 class="hero-title">Watch. Cook.<br><em>Order Instantly.</em></h1>
+    <p class="hero-desc">Discover cooking videos from every culture. Our AI reads each video and shows you exactly which ingredients to order — delivered in minutes.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="doSearch('popular cooking recipes')">▶ Browse Now</button>
+      <button class="btn-ghost" onclick="doSearch('quick easy recipes')">⚡ Quick Meals</button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- GENRE PILLS -->
+<div class="genre-row" id="genreRow">
+  <!-- Global -->
+  <button class="genre-pill active" data-q="popular cooking recipes">🌍 All</button>
+  <button class="genre-pill" data-q="Italian cooking recipes">🇮🇹 Italian</button>
+  <button class="genre-pill" data-q="Chinese cooking recipes">🇨🇳 Chinese</button>
+  <button class="genre-pill" data-q="Mexican cooking recipes">🇲🇽 Mexican</button>
+  <button class="genre-pill" data-q="Japanese cooking recipes">🇯🇵 Japanese</button>
+  <button class="genre-pill" data-q="Korean cooking recipes">🇰🇷 Korean</button>
+  <button class="genre-pill" data-q="Thai cooking recipes">🇹🇭 Thai</button>
+  <button class="genre-pill" data-q="Middle Eastern cooking recipes">🫙 Middle East</button>
+  <button class="genre-pill" data-q="baking desserts recipes">🍰 Baking</button>
+  <button class="genre-pill" data-q="street food world recipes">🍢 Street Food</button>
+  <button class="genre-pill" data-q="vegetarian vegan recipes">🥗 Vegetarian</button>
+  <button class="genre-pill" data-q="quick easy 15 minute recipes">⚡ Quick</button>
+
+  <div class="genre-divider"></div>
+
+  <!-- 🇮🇳 Indian Regional -->
+  <span style="color:var(--accent);font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;padding:0 0.3rem">🇮🇳 India:</span>
+  <button class="genre-pill" data-q="North Indian cooking recipes">🫓 North Indian</button>
+  <button class="genre-pill" data-q="South Indian cooking recipes">🍛 South Indian</button>
+  <button class="genre-pill" data-q="Punjabi cooking recipes">🧆 Punjabi</button>
+  <button class="genre-pill" data-q="Bengali cooking recipes">🐟 Bengali</button>
+  <button class="genre-pill" data-q="Gujarati cooking recipes">🥘 Gujarati</button>
+  <button class="genre-pill" data-q="Rajasthani cooking recipes">🏜️ Rajasthani</button>
+  <button class="genre-pill" data-q="Maharashtrian cooking recipes">🥙 Maharashtrian</button>
+  <button class="genre-pill" data-q="Kerala cooking recipes">🥥 Kerala</button>
+  <button class="genre-pill" data-q="Tamil Nadu cooking recipes">🍚 Tamil</button>
+  <button class="genre-pill" data-q="Hyderabadi biryani recipes">🍖 Hyderabadi</button>
+  <button class="genre-pill" data-q="Kashmiri wazwan cooking recipes">🏔️ Kashmiri</button>
+  <button class="genre-pill" data-q="Goan seafood recipes">🦐 Goan</button>
+  <button class="genre-pill" data-q="Odia Odisha cooking recipes">🌶️ Odia</button>
+  <button class="genre-pill" data-q="Bihari cooking recipes">🫕 Bihari</button>
+  <button class="genre-pill" data-q="street food India chaat recipes">🍡 Indian Street</button>
+
+  <div class="genre-divider"></div>
+
+  <!-- Language -->
+  <select class="lang-select" onchange="setLang(this.value)" id="langSelect">
+    <option value="">🌍 All Languages</option>
+    <optgroup label="🇮🇳 Indian Languages">
+      <option value="hi">Hindi</option>
+      <option value="ta">Tamil</option>
+      <option value="te">Telugu</option>
+      <option value="kn">Kannada</option>
+      <option value="ml">Malayalam</option>
+      <option value="mr">Marathi</option>
+      <option value="bn">Bengali</option>
+      <option value="gu">Gujarati</option>
+      <option value="pa">Punjabi</option>
+    </optgroup>
+    <optgroup label="🌍 World Languages">
+      <option value="en">English</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="ja">Japanese</option>
+      <option value="ar">Arabic</option>
+      <option value="pt">Portuguese</option>
+      <option value="ko">Korean</option>
+      <option value="zh">Chinese</option>
+    </optgroup>
+  </select>
+</div>
+
+<!-- TOP AD -->
+<div id="__cw_ad_t" style="max-width:100%;overflow:hidden;margin:1rem 3rem;">
+  <!-- AdSense: Replace data-ad-client and data-ad-slot with your real values -->
+  <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script> -->
+</div>
+
+<!-- SHELVES -->
+<div id="shelvesContainer"></div>
+
+<!-- MAIN GRID -->
+<div class="main-grid" id="mainGrid">
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p style="font-size:0.9rem;margin-top:0.5rem">Loading recipes from around the world…</p>
+  </div>
+</div>
+
+<!-- BOTTOM AD -->
+<div id="__cw_ad_b" style="max-width:100%;overflow:hidden;margin:0 3rem 2rem;">
+  <!-- AdSense: Replace data-ad-client and data-ad-slot with your real values -->
+  <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script> -->
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <!-- Video -->
+    <div class="modal-video">
+      <iframe id="modalIframe" allowfullscreen allow="autoplay;encrypted-media"></iframe>
+    </div>
+    <!-- Info -->
+    <div class="modal-info">
+      <div class="modal-left">
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta-row">
+          <span class="modal-channel" id="modalChannel"></span>
+          <a class="yt-link" id="modalYtLink" target="_blank" rel="noopener">▶ YouTube</a>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- ══ AI INGREDIENT PANEL ══ -->
+    <div class="ingredient-panel" id="ingredientPanel">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CookWorld</div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="sitemap.xml">Sitemap</a>
+    <a href="mailto:privacy@cookworld.vercel.app">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 CookWorld · All videos hosted on YouTube · Powered by YouTube Data API v3</div>
+</footer>
+
+<script>
+/* ════════════════════════════════════
+   STATE
+   ════════════════════════════════════ */
+let YT_KEY  = 'AIzaSyDiuMQxyEoOKpBf1cEdCdioqLucBlSbnDk';
+let AI_KEY  = localStorage.getItem('cw_ai')  || '';
+let currentLang = '';
+let currentQ    = 'popular cooking recipes';
+
+/* ════════════════════════════════════
+   AFFILIATE STORE DATA BY REGION
+   ════════════════════════════════════ */
+const STORES = {
+  IN: [
+    { name:'Blinkit',       logo:'🟡', color:'#F8CB2E', time:'10 min', commission:'Refer & Earn', url:'https://blinkit.com', search: q => `https://blinkit.com/s/?q=${encodeURIComponent(q)}` },
+    { name:'Zepto',         logo:'🟣', color:'#7B2D8B', time:'10 min', commission:'Refer & Earn', url:'https://www.zeptonow.com', search: q => `https://www.zeptonow.com/search?query=${encodeURIComponent(q)}` },
+    { name:'Swiggy Instamart',logo:'🟠',color:'#FC8019',time:'15 min', commission:'Refer & Earn', url:'https://www.swiggy.com/instamart', search: q => `https://www.swiggy.com/instamart/search?query=${encodeURIComponent(q)}` },
+    { name:'BigBasket',     logo:'🟢', color:'#84C225', time:'2 hrs',  commission:'~3% affiliate', url:'https://www.bigbasket.com', search: q => `https://www.bigbasket.com/ps/?q=${encodeURIComponent(q)}` },
+    { name:'Amazon.in',     logo:'📦', color:'#FF9900', time:'1 day',  commission:'Up to 9%',     url:'https://www.amazon.in', search: q => `https://www.amazon.in/s?k=${encodeURIComponent(q)}+grocery` },
+    { name:'JioMart',       logo:'🔵', color:'#0B3D91', time:'Same day',commission:'~2% affiliate',url:'https://www.jiomart.com', search: q => `https://www.jiomart.com/search/${encodeURIComponent(q)}` },
+  ],
+  US: [
+    { name:'Instacart',     logo:'🥕', color:'#F5763B', time:'1 hr',   commission:'$10/signup',   url:'https://www.instacart.com', search: q => `https://www.instacart.com/products/search?q=${encodeURIComponent(q)}` },
+    { name:'Amazon Fresh',  logo:'📦', color:'#FF9900', time:'2 hrs',  commission:'Up to 10%',    url:'https://www.amazon.com', search: q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}&i=grocery` },
+    { name:'Walmart',       logo:'🔵', color:'#0071CE', time:'Same day',commission:'~4% affiliate',url:'https://www.walmart.com', search: q => `https://www.walmart.com/search?q=${encodeURIComponent(q)}` },
+    { name:'Gopuff',        logo:'🟣', color:'#5900D8', time:'30 min', commission:'Refer & Earn', url:'https://gopuff.com', search: q => `https://gopuff.com/go/search?q=${encodeURIComponent(q)}` },
+  ],
+  GB: [
+    { name:'Ocado',         logo:'🟠', color:'#6B2163', time:'Next day',commission:'~3% affiliate',url:'https://www.ocado.com', search: q => `https://www.ocado.com/search?entry=${encodeURIComponent(q)}` },
+    { name:'Tesco',         logo:'🔵', color:'#005BAR', time:'Same day',commission:'~2%',         url:'https://www.tesco.com', search: q => `https://www.tesco.com/groceries/en-GB/search?query=${encodeURIComponent(q)}` },
+    { name:'Amazon.co.uk',  logo:'📦', color:'#FF9900', time:'1 day',  commission:'Up to 10%',    url:'https://www.amazon.co.uk', search: q => `https://www.amazon.co.uk/s?k=${encodeURIComponent(q)}` },
+  ],
+  GLOBAL: [
+    { name:'Amazon',        logo:'📦', color:'#FF9900', time:'1-2 days',commission:'Up to 10%',   url:'https://www.amazon.com', search: q => `https://www.amazon.com/s?k=${encodeURIComponent(q)}` },
+    { name:'iHerb',         logo:'🌿', color:'#5DAA00', time:'3-5 days',commission:'5%',          url:'https://www.iherb.com', search: q => `https://www.iherb.com/search?kw=${encodeURIComponent(q)}` },
+  ],
+};
+
+/* Detect country from browser */
+function getRegion() {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+  if (tz.includes('Asia/Kolkata') || tz.includes('Asia/Calcutta')) return 'IN';
+  if (tz.includes('America/')) return 'US';
+  if (tz.includes('Europe/London')) return 'GB';
+  return 'GLOBAL';
+}
+
+function getStores() {
+  const region = getRegion();
+  return STORES[region] || STORES.GLOBAL;
+}
+
+/* ════════════════════════════════════
+   INIT
+   ════════════════════════════════════ */
+window.addEventListener('load', () => {
+  initAll();
+  setupPills();
+  window.addEventListener('scroll', () =>
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60));
+});
+
+function setupPills() {
+  document.querySelectorAll('.genre-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.genre-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentQ = btn.dataset.q;
+      loadMainGrid(currentQ);
+    });
+  });
+}
+
+function saveKeys() {
+  const yt = document.getElementById('ytKey').value.trim();
+  const ai = document.getElementById('aiKey').value.trim();
+  if (!yt || yt.includes('•')) return alert('Please enter your YouTube API key.');
+  YT_KEY = yt; localStorage.setItem('cw_yt', yt);
+  if (ai && !ai.includes('•')) { AI_KEY = ai; localStorage.setItem('cw_ai', ai); }
+  document.getElementById('setupBar').style.opacity = '0.4';
+  initAll();
+}
+
+function initAll() { renderShelves(); loadMainGrid(currentQ); }
+
+/* ════════════════════════════════════
+   YOUTUBE FETCH
+   ════════════════════════════════════ */
+async function fetchVideos(q, max=16) {
+  const p = new URLSearchParams({ part:'snippet', q, type:'video', maxResults:max, key:YT_KEY, ...(currentLang && {relevanceLanguage:currentLang}) });
+  const res  = await fetch(`https://www.googleapis.com/youtube/v3/search?${p}`);
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  const items = (data.items||[]).filter(i=>i.id?.videoId);
+  const ids   = items.map(i=>i.id.videoId).join(',');
+  let det = {};
+  if (ids) {
+    const dr = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${YT_KEY}`);
+    const dd = await dr.json();
+    (dd.items||[]).forEach(v=>{ det[v.id]=v; });
+  }
+  return items.map(item => {
+    const vid=item.id.videoId, sn=item.snippet, d=det[vid]||{};
+    return { id:vid, title:sn.title, channel:sn.channelTitle,
+      thumb:sn.thumbnails?.high?.url||sn.thumbnails?.medium?.url||sn.thumbnails?.default?.url,
+      duration:parseDur(d.contentDetails?.duration||''),
+      views:fmtV(d.statistics?.viewCount||''), country:detectCountry(sn.title) };
+  });
+}
+
+/* ════════════════════════════════════
+   SHELVES
+   ════════════════════════════════════ */
+const SHELVES = [
+  {label:'Trending Today',        sub:'Most Watched',       q:'trending cooking recipes 2024'},
+  {label:'Indian Kitchen',        sub:'🇮🇳 Best of India',  q:'popular Indian cooking recipes'},
+  {label:'North Indian Flavours', sub:'🫓 Dal, Roti & More', q:'North Indian cooking recipes'},
+  {label:'South Indian Specials', sub:'🍛 Dosa, Idli & More',q:'South Indian cooking recipes Tamil Telugu'},
+  {label:'Punjabi Tadka',         sub:'🧆 Rich & Spicy',    q:'Punjabi cooking recipes dhaba style'},
+  {label:'Bengali Kitchen',       sub:'🐟 Fish & Sweets',   q:'Bengali cooking recipes mishti'},
+  {label:'Street Food India',     sub:'🍡 Chaat & Snacks',  q:'Indian street food chaat recipes'},
+  {label:'Quick & Easy',          sub:'⚡ Under 20 min',    q:'quick easy 15 minute recipes'},
+  {label:'Baking & Desserts',     sub:'🍰 Sweet Side',      q:'baking desserts recipes'},
+  {label:'Asian Flavours',        sub:'🥢 East Asia',       q:'Asian Chinese Japanese Korean cooking'},
+  {label:'Street Food World',     sub:'🍢 Globe',           q:'street food world recipes'},
+];
+
+async function renderShelves() {
+  const c = document.getElementById('shelvesContainer');
+  c.innerHTML = '';
+  for (const sh of SHELVES) {
+    const sec = document.createElement('div'); sec.className='section';
+    const sid = 'sh_'+sh.label.replace(/\W/g,'_');
+    sec.innerHTML=`<div class="section-head"><span class="section-label">${sh.label}</span><span class="section-sub">${sh.sub}</span></div><div class="shelf" id="${sid}">${skelCards(8)}</div>`;
+    c.appendChild(sec);
+    fetchVideos(sh.q,12).then(vids=>{ const el=document.getElementById(sid); if(el) el.innerHTML=vids.map((v,i)=>nfCard(v,i)).join(''); }).catch(()=>{});
+  }
+}
+
+/* ════════════════════════════════════
+   MAIN GRID
+   ════════════════════════════════════ */
+async function loadMainGrid(q) {
+  const g = document.getElementById('mainGrid');
+  g.innerHTML=`<div class="loading-state"><div class="spinner"></div><p style="font-size:0.85rem;margin-top:0.5rem">Loading ${q.replace(/recipes?/gi,'').trim()} videos…</p></div>`;
+  try {
+    const vids = await fetchVideos(q,24);
+    if (!vids.length) { g.innerHTML=`<div class="empty-state"><div style="font-size:3rem">🍳</div><p>No videos found.</p></div>`; return; }
+    g.innerHTML = vids.map((v,i)=>nfCard(v,i,true)).join('');
+  } catch(e) {
+    g.innerHTML=`<div class="empty-state"><p style="color:var(--accent)">${e.message}</p></div>`;
+  }
+}
+
+/* ════════════════════════════════════
+   CARD TEMPLATE
+   ════════════════════════════════════ */
+function nfCard(v,i) {
+  const t=esc(v.title), ch=esc(v.channel);
+  return `<div class="nf-card" onclick="openModal('${v.id}','${t}','${ch}')" style="animation-delay:${Math.min(i*.04,.5)}s">
+    <div class="nf-thumb">
+      <img src="${v.thumb}" alt="${t}" loading="lazy" onerror="this.src='https://placehold.co/320x180/242018/8a8070?text=🍳'">
+      ${v.duration?`<span class="nf-duration">${v.duration}</span>`:''}
+      <div class="nf-overlay">
+        <div class="nf-overlay-play">▶</div>
+        <div class="nf-overlay-title">${v.title}</div>
+        <div class="nf-overlay-meta">
+          ${v.country?`<span class="nf-tag">${v.country}</span>`:''}
+          ${v.views?`<span class="nf-views">${v.views} views</span>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="nf-info">
+      <div class="nf-title">${v.title}</div>
+      <div class="nf-channel"><div class="nf-dot"></div>${v.channel}</div>
+    </div>
+  </div>`;
+}
+
+function skelCards(n){return Array.from({length:n}).map(()=>`<div class="nf-card" style="pointer-events:none"><div class="nf-thumb" style="background:var(--surface2);animation:pulse 1.5s ease infinite"></div><div class="nf-info"><div style="height:10px;background:var(--surface2);border-radius:4px;margin-bottom:6px;animation:pulse 1.5s ease infinite"></div><div style="height:8px;background:var(--surface2);border-radius:4px;width:60%;animation:pulse 1.5s ease infinite"></div></div></div>`).join('');}
+
+/* ════════════════════════════════════
+   MODAL
+   ════════════════════════════════════ */
+function openModal(id, title, channel) {
+  document.getElementById('modalIframe').src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalChannel').textContent=channel;
+  document.getElementById('modalYtLink').href=`https://www.youtube.com/watch?v=${id}`;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  loadIngredients(title, channel);
+}
+
+function closeModal() {
+  document.getElementById('modalIframe').src='';
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function handleOverlayClick(e){ if(e.target===document.getElementById('modal')) closeModal(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ════════════════════════════════════
+   AI INGREDIENT EXTRACTION
+   ════════════════════════════════════ */
+async function loadIngredients(title, channel) {
+  const panel = document.getElementById('ingredientPanel');
+  panel.innerHTML=`<div class="ai-loading"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><span>AI is reading this video to extract ingredients…</span></div>`;
+
+  let dishData = null;
+
+  if (AI_KEY) {
+    try { dishData = await extractWithClaude(title, channel); } catch(e) { console.warn('Claude API error:', e); }
+  }
+
+  // Fallback: rule-based extraction
+  if (!dishData) { dishData = ruleBasedExtract(title); }
+
+  renderIngredientPanel(panel, dishData, title);
+}
+
+async function extractWithClaude(title, channel) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      messages:[{
+        role:'user',
+        content:`You are a cooking assistant. Given this YouTube cooking video title and channel, extract the dish name, cuisine type, and key ingredients needed to make it.
+
+Title: "${title}"
+Channel: "${channel}"
+
+Respond ONLY with valid JSON (no markdown, no backticks):
+{
+  "dish": "dish name",
+  "cuisine": "cuisine type",
+  "flag": "country flag emoji",
+  "ingredients": [
+    {"name": "ingredient name", "emoji": "relevant food emoji", "searchQuery": "exact search term for grocery store"},
+    ...
+  ]
+}
+
+Rules:
+- List 6-10 key ingredients
+- Use accurate food emojis (🧅🧄🍅🫚🌶️🥛🧈🍋🥩🐟 etc.)
+- searchQuery should be a simple grocery search term
+- Keep dish name concise`
+      }]
+    })
+  });
+  const data = await res.json();
+  const text = data.content?.find(b=>b.type==='text')?.text || '';
+  return JSON.parse(text.replace(/```json|```/g,'').trim());
+}
+
+/* Rule-based fallback */
+function ruleBasedExtract(title) {
+  const t = title.toLowerCase();
+  const dishes = [
+    { match:/biryani/,         dish:'Biryani',          cuisine:'Indian',   flag:'🇮🇳', ingredients:[{name:'Basmati Rice',emoji:'🍚',searchQuery:'basmati rice'},{name:'Chicken',emoji:'🍗',searchQuery:'chicken'},{name:'Onion',emoji:'🧅',searchQuery:'onion'},{name:'Tomato',emoji:'🍅',searchQuery:'tomato'},{name:'Yogurt',emoji:'🥛',searchQuery:'yogurt'},{name:'Spices',emoji:'🌶️',searchQuery:'biryani masala'},{name:'Ginger',emoji:'🫚',searchQuery:'ginger'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'}] },
+    { match:/butter chicken|murgh makhani/,dish:'Butter Chicken',cuisine:'Indian',flag:'🇮🇳',ingredients:[{name:'Chicken',emoji:'🍗',searchQuery:'chicken'},{name:'Butter',emoji:'🧈',searchQuery:'butter'},{name:'Tomato',emoji:'🍅',searchQuery:'tomato puree'},{name:'Cream',emoji:'🥛',searchQuery:'heavy cream'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'},{name:'Ginger',emoji:'🫚',searchQuery:'ginger'},{name:'Spices',emoji:'🌶️',searchQuery:'garam masala'},{name:'Onion',emoji:'🧅',searchQuery:'onion'}] },
+    { match:/pasta|spaghetti|carbonara/,   dish:'Pasta',         cuisine:'Italian', flag:'🇮🇹',ingredients:[{name:'Pasta',emoji:'🍝',searchQuery:'pasta'},{name:'Olive Oil',emoji:'🫒',searchQuery:'olive oil'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'},{name:'Parmesan',emoji:'🧀',searchQuery:'parmesan cheese'},{name:'Tomato',emoji:'🍅',searchQuery:'tomatoes'},{name:'Basil',emoji:'🌿',searchQuery:'fresh basil'},{name:'Salt',emoji:'🧂',searchQuery:'salt'}] },
+    { match:/fried rice|wok/,             dish:'Fried Rice',    cuisine:'Asian',   flag:'🥢', ingredients:[{name:'Rice',emoji:'🍚',searchQuery:'rice'},{name:'Eggs',emoji:'🥚',searchQuery:'eggs'},{name:'Soy Sauce',emoji:'🫙',searchQuery:'soy sauce'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'},{name:'Onion',emoji:'🧅',searchQuery:'green onion'},{name:'Vegetables',emoji:'🥦',searchQuery:'mixed vegetables'},{name:'Oil',emoji:'🫚',searchQuery:'cooking oil'}] },
+    { match:/pizza/,                      dish:'Pizza',         cuisine:'Italian', flag:'🇮🇹',ingredients:[{name:'Pizza Dough',emoji:'🫓',searchQuery:'pizza dough'},{name:'Tomato Sauce',emoji:'🍅',searchQuery:'tomato sauce'},{name:'Mozzarella',emoji:'🧀',searchQuery:'mozzarella cheese'},{name:'Olive Oil',emoji:'🫒',searchQuery:'olive oil'},{name:'Basil',emoji:'🌿',searchQuery:'basil'},{name:'Toppings',emoji:'🍕',searchQuery:'pizza toppings'}] },
+    { match:/curry/,                      dish:'Curry',         cuisine:'Indian',  flag:'🇮🇳',ingredients:[{name:'Onion',emoji:'🧅',searchQuery:'onion'},{name:'Tomato',emoji:'🍅',searchQuery:'tomato'},{name:'Curry Powder',emoji:'🌶️',searchQuery:'curry powder'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'},{name:'Ginger',emoji:'🫚',searchQuery:'ginger'},{name:'Oil',emoji:'🫚',searchQuery:'vegetable oil'},{name:'Coconut Milk',emoji:'🥥',searchQuery:'coconut milk'}] },
+    { match:/ramen|noodle/,               dish:'Ramen',         cuisine:'Japanese',flag:'🇯🇵',ingredients:[{name:'Ramen Noodles',emoji:'🍜',searchQuery:'ramen noodles'},{name:'Broth',emoji:'🍲',searchQuery:'chicken broth'},{name:'Soy Sauce',emoji:'🫙',searchQuery:'soy sauce'},{name:'Eggs',emoji:'🥚',searchQuery:'soft boiled eggs'},{name:'Pork',emoji:'🥩',searchQuery:'pork belly'},{name:'Nori',emoji:'🫘',searchQuery:'nori seaweed'},{name:'Green Onion',emoji:'🧅',searchQuery:'green onion'}] },
+    { match:/taco|burrito/,               dish:'Taco',          cuisine:'Mexican', flag:'🇲🇽',ingredients:[{name:'Tortilla',emoji:'🫓',searchQuery:'tortilla'},{name:'Meat',emoji:'🥩',searchQuery:'ground beef'},{name:'Salsa',emoji:'🍅',searchQuery:'salsa'},{name:'Avocado',emoji:'🥑',searchQuery:'avocado'},{name:'Cheese',emoji:'🧀',searchQuery:'cheddar cheese'},{name:'Lime',emoji:'🍋',searchQuery:'lime'},{name:'Coriander',emoji:'🌿',searchQuery:'coriander'}] },
+    { match:/cake|brownie|cookie|baking/, dish:'Baked Goods',   cuisine:'Baking',  flag:'🍰',ingredients:[{name:'Flour',emoji:'🌾',searchQuery:'all purpose flour'},{name:'Sugar',emoji:'🍬',searchQuery:'sugar'},{name:'Eggs',emoji:'🥚',searchQuery:'eggs'},{name:'Butter',emoji:'🧈',searchQuery:'unsalted butter'},{name:'Milk',emoji:'🥛',searchQuery:'milk'},{name:'Baking Powder',emoji:'🫙',searchQuery:'baking powder'},{name:'Vanilla',emoji:'🍶',searchQuery:'vanilla extract'}] },
+    { match:/salad/,                      dish:'Salad',         cuisine:'Healthy', flag:'🥗', ingredients:[{name:'Lettuce',emoji:'🥬',searchQuery:'lettuce'},{name:'Tomato',emoji:'🍅',searchQuery:'cherry tomatoes'},{name:'Cucumber',emoji:'🥒',searchQuery:'cucumber'},{name:'Olive Oil',emoji:'🫒',searchQuery:'olive oil'},{name:'Lemon',emoji:'🍋',searchQuery:'lemon'},{name:'Salt',emoji:'🧂',searchQuery:'salt'}] },
+  ];
+  for (const d of dishes) if (d.match.test(t)) return {dish:d.dish,cuisine:d.cuisine,flag:d.flag,ingredients:d.ingredients};
+  return {
+    dish: title.replace(/\|.*$/,'').replace(/[-–].*recipe.*/i,'').trim().slice(0,40),
+    cuisine:'World',flag:'🌍',
+    ingredients:[
+      {name:'Onion',emoji:'🧅',searchQuery:'onion'},{name:'Garlic',emoji:'🧄',searchQuery:'garlic'},
+      {name:'Tomato',emoji:'🍅',searchQuery:'tomato'},{name:'Oil',emoji:'🫚',searchQuery:'cooking oil'},
+      {name:'Salt',emoji:'🧂',searchQuery:'salt'},{name:'Spices',emoji:'🌶️',searchQuery:'spice mix'}
+    ]
+  };
+}
+
+/* ════════════════════════════════════
+   RENDER INGREDIENT PANEL
+   ════════════════════════════════════ */
+function renderIngredientPanel(panel, data, videoTitle) {
+  const stores  = getStores();
+  const mainIng = data.ingredients[0]?.searchQuery || data.dish;
+
+  const ingChips = data.ingredients.map(ing => `
+    <div class="ingredient-chip" onclick="searchIngredient('${esc(ing.searchQuery)}')">
+      <div class="ing-icon-wrap">${ing.emoji}</div>
+      <div class="ing-label">${ing.name}</div>
+    </div>`).join('');
+
+  const storeCards = stores.map(s => `
+    <a class="store-card" href="${s.search(mainIng)}" target="_blank" rel="noopener" onclick="trackClick('${s.name}')">
+      <div class="store-logo" style="background:${s.color}22">${s.logo}</div>
+      <div class="store-info">
+        <div class="store-name">${s.name}</div>
+        <div class="store-time">🚀 ${s.time}</div>
+        <div class="store-commission">💰 ${s.commission}</div>
+      </div>
+      <div class="store-arrow">›</div>
+    </a>`).join('');
+
+  panel.innerHTML = `
+    <div class="ingredient-header">
+      <div class="ingredient-header-left">
+        <div class="ai-badge">🤖 AI Detected</div>
+        <div class="dish-name">${data.dish}</div>
+        <div class="dish-cuisine-tag">${data.flag} ${data.cuisine}</div>
+      </div>
+    </div>
+
+    <div class="ingredients-scroll">${ingChips}</div>
+
+    <div class="store-section">
+      <div class="store-section-title">🛒 Order Ingredients Instantly</div>
+      <div class="store-grid">${storeCards}</div>
+    </div>
+
+    <div class="order-strip">
+      <div class="order-strip-text">Shop <span>${data.ingredients.length} ingredients</span> for <em>${data.dish}</em> — delivered fast</div>
+      <button class="order-all-btn" onclick="orderAll('${esc(data.dish)}')">🛒 Shop All Stores</button>
+    </div>`;
+}
+
+/* ════════════════════════════════════
+   ACTIONS
+   ════════════════════════════════════ */
+function searchIngredient(q) {
+  const stores = getStores();
+  const store  = stores[0];
+  window.open(store.search(q), '_blank');
+}
+
+function orderAll(dish) {
+  const stores = getStores();
+  stores.slice(0,3).forEach(s => window.open(s.search(dish + ' ingredients'), '_blank'));
+}
+
+function trackClick(storeName) {
+  // Add your analytics/affiliate tracking here
+  console.log('Affiliate click:', storeName);
+}
+
+/* ════════════════════════════════════
+   SEARCH & FILTER
+   ════════════════════════════════════ */
+function doSearch(q) {
+  document.querySelectorAll('.genre-pill').forEach(b=>b.classList.remove('active'));
+  currentQ = q || (document.getElementById('navSearch').value.trim()+' cooking recipe');
+  loadMainGrid(currentQ);
+  document.getElementById('mainGrid').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function setLang(v) { currentLang=v; renderShelves(); loadMainGrid(currentQ); }
+
+function resetHome() {
+  document.querySelectorAll('.genre-pill').forEach((b,i)=>b.classList.toggle('active',i===0));
+  currentQ='popular cooking recipes';
+  renderShelves(); loadMainGrid(currentQ);
+}
+
+/* ════════════════════════════════════
+   HELPERS
+   ════════════════════════════════════ */
+function parseDur(iso){if(!iso)return'';const m=iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);if(!m)return'';const h=+m[1]||0,mn=+m[2]||0,s=+m[3]||0;return h?`${h}:${pad(mn)}:${pad(s)}`:`${mn}:${pad(s)}`;}
+function pad(n){return String(n).padStart(2,'0');}
+function fmtV(n){if(!n)return'';const x=+n;return x>=1e6?(x/1e6).toFixed(1)+'M':x>=1e3?Math.round(x/1e3)+'K':String(x);}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function detectCountry(t){
+  const lo=t.toLowerCase();
+  const map=[
+    // Indian Regional
+    [/punjabi|dhaba|amritsari|sarson|makki/,'🧆 Punjabi'],
+    [/bengali|mishti|hilsa|rosogolla|bong/,'🐟 Bengali'],
+    [/gujarati|dhokla|thepla|undhiyu/,'🥘 Gujarati'],
+    [/rajasthani|dal baati|laal maas|gatte/,'🏜️ Rajasthani'],
+    [/maharashtrian|vada pav|misal|puran poli/,'🥙 Maharashtrian'],
+    [/kerala|appam|fish curry|sadya|puttu/,'🥥 Kerala'],
+    [/tamil|sambar|rasam|chettinad|kozhukattai/,'🍚 Tamil'],
+    [/hyderabadi|dum biryani|haleem|mirchi ka salan/,'🍖 Hyderabadi'],
+    [/kashmiri|wazwan|rogan josh|yakhni/,'🏔️ Kashmiri'],
+    [/goan|vindaloo|sorpotel|xacuti/,'🦐 Goan'],
+    [/south indian|dosa|idli|vada|upma|uttapam/,'🍛 South Indian'],
+    [/north indian|paneer|naan|butter chicken|dal makhani/,'🫓 North Indian'],
+    [/biryani|masala|curry|chaat|samosa|pakora/,'🇮🇳 Indian'],
+    [/india|indian|roti|dal|sabzi|khichdi/,'🇮🇳 Indian'],
+    // International
+    [/italian|italy|pasta|pizza|risotto|tiramisu/,'🇮🇹 Italian'],
+    [/chinese|china|wok|dumpling|dim sum/,'🇨🇳 Chinese'],
+    [/mexican|mexico|taco|burrito|guacamole/,'🇲🇽 Mexican'],
+    [/japanese|japan|sushi|ramen|miso|tempura/,'🇯🇵 Japanese'],
+    [/korean|korea|kimchi|bibimbap|kbbq/,'🇰🇷 Korean'],
+    [/thai|thailand|pad thai|tom yum/,'🇹🇭 Thai'],
+    [/french|france|croissant|soufflé/,'🇫🇷 French'],
+    [/arabic|middle east|lebanese|hummus|falafel/,'🫙 Middle Eastern'],
+    [/american|bbq|burger|southern fried/,'🇺🇸 American'],
+  ];
+  for(const[re,f]of map)if(re.test(lo))return f;
+  return '';
+}
+
+/* pulse */
+const s=document.createElement('style');
+s.textContent=`@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:0.9}}`;
+document.head.appendChild(s);
+</script>
+</body>
+</html>
