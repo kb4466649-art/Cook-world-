@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CookWorld – Global Cooking Videos | Indian & World Recipes</title>
+<meta name="description" content="Discover the best cooking videos from India and around the world. Watch Punjabi, South Indian, Bengali, Gujarati, Italian, Chinese recipes and more. Order ingredients instantly.">
+<meta name="keywords" content="cooking videos, Indian recipes, South Indian cooking, Punjabi recipes, Bengali recipes, Gujarati recipes, Kerala recipes, Tamil recipes, Hyderabadi biryani, street food India, Italian cooking, Chinese recipes, cooking tutorials YouTube">
+<meta name="author" content="CookWorld">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cookworld.vercel.app/">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cookworld.vercel.app/">
+<meta property="og:title" content="CookWorld – Watch & Cook Global Recipes">
+<meta property="og:description" content="Discover cooking videos from India and around the world. Filter by region and language.">
+<meta property="og:site_name" content="CookWorld">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"CookWorld","url":"https://cookworld.vercel.app/","potentialAction":{"@type":"SearchAction","target":"https://cookworld.vercel.app/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAwF7OryNBAgEox0drQEvEHbR99iT5C-l8",
+  authDomain: "cook-world-b1a7d.firebaseapp.com",
+  projectId: "cook-world-b1a7d",
+  storageBucket: "cook-world-b1a7d.firebasestorage.app",
+  messagingSenderId: "887126663560",
+  appId: "1:887126663560:web:c805f8e5979a67dade1a3d",
+  measurementId: "G-QJX8D9C181"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+// ── Expose to window so inline scripts can use ──
+window.__fb = { db, auth, doc, getDoc, setDoc, collection, getDocs, signInWithEmailAndPassword, signOut, onAuthStateChanged };
+
+// ── Load site settings from Firestore ──
+async function loadSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'site'));
+    if (snap.exists()) {
+      const d = snap.data();
+      // YouTube API keys
+      if (d.ytKeys && d.ytKeys.length) window.__ytKeys = d.ytKeys;
+      // AdSense slots
+      if (d.adTop)    document.getElementById('adSlotTop').innerHTML    = d.adTop;
+      if (d.adBottom) document.getElementById('adSlotBottom').innerHTML = d.adBottom;
+      if (d.adMid)    document.getElementById('adSlotMid').innerHTML    = d.adMid;
+      // Site customisation
+      if (d.siteName)   document.querySelectorAll('.logo-text').forEach(e=>e.textContent=d.siteName);
+      if (d.heroTitle)  document.getElementById('heroTitle').innerHTML  = d.heroTitle;
+      if (d.heroDesc)   document.getElementById('heroDesc').textContent = d.heroDesc;
+      if (d.accentColor){ document.documentElement.style.setProperty('--accent', d.accentColor); }
+    }
+  } catch(e){ console.warn('Settings load:', e.message); }
+}
+
+// ── Auth state ──
+onAuthStateChanged(auth, user => {
+  window.__adminUser = user;
+  document.getElementById('adminPanel').style.display = user ? 'flex' : 'none';
+  document.getElementById('adminLoginModal').style.display = 'none';
+  if (user) loadAdminData();
+});
+
+window.__loadSettings = loadSettings;
+loadSettings();
+</script>
+
+<style>
+:root{
+  --bg:#0f0e0c;--surface:#1a1814;--surface2:#242018;
+  --accent:#e8a045;--accent2:#c45c2a;
+  --text:#f0ebe3;--muted:#8a8070;--border:#2e2a22;--card-bg:#1e1c18;
+  --admin:#7c3aed;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;transition:background 0.3s;}
+nav.scrolled{background:rgba(15,14,12,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--accent);cursor:pointer;user-select:none;}
+.logo span{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.nav-search{position:relative;}
+.nav-search input{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;padding:0.4rem 1rem 0.4rem 2rem;outline:none;width:200px;transition:all 0.2s;}
+.nav-search input:focus{border-color:var(--accent);width:260px;}
+.nav-search input::placeholder{color:var(--muted);}
+.nav-search-icon{position:absolute;left:0.6rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.8rem;pointer-events:none;}
+
+/* HERO */
+.hero{position:relative;height:80vh;min-height:480px;max-height:700px;display:flex;align-items:flex-end;padding:0 2.5rem 3.5rem;overflow:hidden;}
+.hero-bg{
+  position:absolute;inset:0;
+  background-image:url('hero.jpg');
+  background-size:cover;background-position:center 25%;background-repeat:no-repeat;
+  transform:scale(1.04);transition:transform 8s ease;
+}
+.hero:hover .hero-bg{transform:scale(1.0);}
+.hero-pattern{display:none;}
+.hero-glow{display:none;}
+.hero-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(8,6,4,0.98) 0%,rgba(8,6,4,0.72) 35%,rgba(8,6,4,0.3) 65%,rgba(8,6,4,0.08) 100%);
+}
+.hero-grad::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(8,6,4,0.65) 0%,transparent 65%);}
+.hero-content{position:relative;z-index:2;max-width:560px;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--accent);color:#0f0e0c;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0.28rem 0.75rem;border-radius:4px;margin-bottom:1rem;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:900;line-height:1.08;margin-bottom:0.8rem;text-shadow:0 2px 20px rgba(0,0,0,0.8);}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-desc{color:rgba(240,235,227,0.88);text-shadow:0 1px 8px rgba(0,0,0,0.6);font-size:0.95rem;line-height:1.65;margin-bottom:1.8rem;max-width:400px;}
+.hero-btns{display:flex;gap:0.7rem;flex-wrap:wrap;}
+.btn-primary{display:flex;align-items:center;gap:0.5rem;background:var(--accent);color:#0f0e0c;border:none;border-radius:8px;padding:0.7rem 1.4rem;font-weight:700;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{background:#f0b055;transform:scale(1.02);}
+.btn-ghost{display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.1);color:var(--text);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:0.7rem 1.4rem;font-weight:600;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:all 0.2s;}
+.btn-ghost:hover{background:rgba(255,255,255,0.18);}
+
+/* GENRE PILLS */
+.genre-row{padding:1.2rem 2.5rem 0;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;}
+.genre-pill{padding:0.32rem 0.9rem;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+.genre-pill:hover{border-color:rgba(232,160,69,0.5);color:var(--text);}
+.genre-pill.active{background:var(--accent);color:#0f0e0c;border-color:var(--accent);font-weight:700;}
+.genre-divider{width:1px;height:18px;background:var(--border);margin:0 0.2rem;}
+.genre-label{color:var(--accent);font-size:0.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;padding:0 0.2rem;}
+.lang-select{margin-left:auto;padding:0.32rem 0.9rem;border-radius:50px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;outline:none;}
+
+/* AD SLOTS */
+.ad-slot{margin:1.2rem 2.5rem;min-height:4px;}
+
+/* SECTION */
+.section{padding:0 2.5rem;margin-bottom:2rem;}
+.section-head{display:flex;align-items:baseline;gap:0.6rem;margin-bottom:0.9rem;}
+.section-label{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
+.section-sub{font-size:0.72rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+
+/* SHELF */
+.shelf{display:flex;gap:0.7rem;overflow-x:auto;padding-bottom:0.6rem;scrollbar-width:thin;scrollbar-color:var(--border) transparent;-webkit-overflow-scrolling:touch;}
+.shelf::-webkit-scrollbar{height:3px;}
+.shelf::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+/* NETFLIX CARD */
+.nf-card{flex-shrink:0;width:210px;border-radius:8px;overflow:hidden;background:var(--card-bg);cursor:pointer;position:relative;transition:transform 0.28s cubic-bezier(.34,1.56,.64,1),box-shadow 0.28s;animation:fadeUp 0.4s ease both;}
+.nf-card:hover{transform:scale(1.07) translateY(-4px);box-shadow:0 18px 50px rgba(0,0,0,0.7),0 0 0 1.5px var(--accent);z-index:10;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.nf-thumb{position:relative;aspect-ratio:16/9;background:var(--surface2);overflow:hidden;}
+.nf-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.35s;}
+.nf-card:hover .nf-thumb img{transform:scale(1.06);}
+.nf-duration{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,0.85);color:#fff;font-size:0.68rem;font-weight:600;padding:2px 5px;border-radius:3px;}
+.nf-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,14,12,0.95) 0%,rgba(15,14,12,0.15) 60%,transparent 100%);opacity:0;transition:opacity 0.25s;display:flex;flex-direction:column;justify-content:flex-end;padding:0.7rem;gap:0.4rem;}
+.nf-card:hover .nf-overlay{opacity:1;}
+.nf-play{width:34px;height:34px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;align-self:flex-start;}
+.nf-overlay-title{font-size:0.75rem;font-weight:600;line-height:1.3;color:#fff;}
+.nf-overlay-meta{display:flex;gap:0.35rem;align-items:center;flex-wrap:wrap;}
+.nf-tag{padding:1px 5px;border-radius:3px;font-size:0.62rem;font-weight:600;background:rgba(232,160,69,0.2);color:var(--accent);border:1px solid rgba(232,160,69,0.3);}
+.nf-views{font-size:0.62rem;color:rgba(255,255,255,0.5);}
+.nf-info{padding:0.55rem 0.7rem 0.7rem;}
+.nf-title{font-size:0.8rem;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:0.25rem;}
+.nf-channel{font-size:0.7rem;color:var(--muted);display:flex;align-items:center;gap:0.3rem;}
+.nf-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+/* INGREDIENT BUTTONS */
+.ingredient-bar{display:none;position:absolute;bottom:0;left:0;right:0;background:rgba(15,14,12,0.97);border-top:1px solid var(--border);padding:0.5rem;display:flex;gap:0.3rem;flex-wrap:wrap;z-index:5;}
+.nf-card:hover .ingredient-bar{display:flex;}
+.ing-btn{padding:3px 8px;border-radius:4px;border:none;font-size:0.62rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:2px;transition:opacity 0.15s;}
+.ing-btn:hover{opacity:0.85;}
+.ing-blinkit{background:#f8d025;color:#1a1a1a;}
+.ing-zepto{background:#8b2be2;color:#fff;}
+.ing-amazon{background:#ff9900;color:#1a1a1a;}
+.ing-bigbasket{background:#84b527;color:#fff;}
+.ing-swiggy{background:#fc8019;color:#fff;}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:0.9rem;padding:0 2.5rem 2rem;}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:1.5rem 2.5rem 3rem;flex-wrap:wrap;}
+.page-btn{padding:0.5rem 1rem;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.18s;}
+.page-btn:hover,.page-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(232,160,69,0.08);}
+.page-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.page-info{color:var(--muted);font-size:0.82rem;}
+.load-more-btn{padding:0.7rem 2rem;border-radius:8px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.load-more-btn:hover{background:rgba(232,160,69,0.1);}
+
+/* LOADING */
+.loading-state{grid-column:1/-1;text-align:center;padding:3rem 2rem;color:var(--muted);}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 1rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{grid-column:1/-1;text-align:center;padding:3rem 2rem;color:var(--muted);}
+
+/* ═══════════════════════════════════
+   ADMIN PANEL
+═══════════════════════════════════ */
+#adminPanel{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:500;
+  background:rgba(18,10,40,0.98);
+  border-top:2px solid var(--admin);
+  backdrop-filter:blur(16px);
+  flex-direction:column;
+  max-height:85vh;
+  overflow-y:auto;
+}
+.admin-header{display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1.5rem;border-bottom:1px solid rgba(124,58,237,0.3);}
+.admin-title{color:var(--admin);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:0.5rem;}
+.admin-close{background:rgba(124,58,237,0.2);border:1px solid var(--admin);color:var(--text);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;}
+.admin-tabs{display:flex;border-bottom:1px solid rgba(124,58,237,0.2);}
+.admin-tab{padding:0.6rem 1.2rem;color:var(--muted);font-size:0.82rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.admin-tab.active{color:var(--admin);border-bottom-color:var(--admin);}
+.admin-body{padding:1.2rem 1.5rem;}
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+.admin-row{display:flex;gap:0.6rem;margin-bottom:0.75rem;align-items:flex-start;flex-wrap:wrap;}
+.admin-label{color:var(--muted);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.3rem;}
+.admin-input{flex:1;min-width:180px;padding:0.55rem 0.9rem;background:rgba(255,255,255,0.06);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;}
+.admin-input:focus{border-color:var(--admin);}
+.admin-textarea{width:100%;min-height:80px;resize:vertical;padding:0.55rem 0.9rem;background:rgba(255,255,255,0.06);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;line-height:1.5;}
+.admin-textarea:focus{border-color:var(--admin);}
+.admin-btn{padding:0.5rem 1.1rem;background:var(--admin);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;}
+.admin-btn:hover{opacity:0.85;}
+.admin-btn-red{background:#e74c3c;}
+.admin-btn-green{background:#27ae60;}
+.admin-btn-outline{background:transparent;border:1px solid var(--admin);color:var(--admin);}
+.key-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.75rem;}
+.key-item{display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;}
+.key-item-text{flex:1;font-size:0.78rem;color:var(--muted);font-family:monospace;}
+.key-item-active{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0;}
+.key-item-del{background:transparent;border:none;color:#e74c3c;cursor:pointer;font-size:0.85rem;padding:0 0.2rem;}
+.ad-toggle{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;}
+.toggle-switch{position:relative;width:38px;height:20px;cursor:pointer;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:20px;transition:0.3s;}
+.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s;}
+.toggle-switch input:checked+.toggle-slider{background:var(--admin);}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(18px);}
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.6rem;margin-bottom:1rem;}
+.stat-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:0.75rem;text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--accent);}
+.stat-label{font-size:0.72rem;color:var(--muted);margin-top:0.2rem;}
+.admin-success{color:#27ae60;font-size:0.8rem;margin-top:0.4rem;}
+.admin-error{color:#e74c3c;font-size:0.8rem;margin-top:0.4rem;}
+
+/* ADMIN LOGIN MODAL */
+#adminLoginModal{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.9);
+  z-index:600;
+  align-items:center;justify-content:center;
+}
+.login-box{background:var(--surface);border:1px solid var(--admin);border-radius:16px;padding:2rem;width:90%;max-width:360px;text-align:center;}
+.login-box h3{font-family:'Playfair Display',serif;color:var(--admin);margin-bottom:0.5rem;}
+.login-box p{color:var(--muted);font-size:0.82rem;margin-bottom:1.5rem;}
+.login-box input{width:100%;padding:0.65rem 1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;margin-bottom:0.75rem;}
+.login-box input:focus{border-color:var(--admin);}
+.login-box .admin-btn{width:100%;padding:0.7rem;}
+.login-cancel{display:block;margin-top:0.75rem;color:var(--muted);font-size:0.8rem;cursor:pointer;}
+.login-error{color:#e74c3c;font-size:0.8rem;margin-top:0.5rem;}
+
+/* MODAL VIDEO */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:400;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border-radius:14px;border:1px solid var(--border);width:100%;max-width:800px;overflow:hidden;animation:modalIn 0.25s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.94) translateY(14px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-video{aspect-ratio:16/9;background:#000;}
+.modal-video iframe{width:100%;height:100%;border:none;}
+.modal-body{padding:1.1rem 1.3rem 1.3rem;}
+.modal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.5rem;}
+.modal-title{font-size:1rem;font-weight:700;line-height:1.4;flex:1;}
+.modal-close{width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;color:var(--text);font-size:0.95rem;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s;}
+.modal-close:hover{background:rgba(232,160,69,0.15);border-color:var(--accent);}
+.modal-meta{display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;}
+.modal-channel{color:var(--muted);font-size:0.82rem;}
+.yt-link{display:inline-flex;align-items:center;gap:0.3rem;padding:0.3rem 0.8rem;background:#ff0000;color:#fff;border-radius:50px;text-decoration:none;font-size:0.75rem;font-weight:700;}
+.modal-stores{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.modal-store-btn{padding:0.4rem 0.9rem;border-radius:6px;border:none;font-size:0.78rem;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:opacity 0.15s;}
+.modal-store-btn:hover{opacity:0.85;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent);font-weight:900;}
+.footer-links{display:flex;gap:1.2rem;}
+.footer-links a{color:var(--muted);font-size:0.8rem;text-decoration:none;}
+.footer-links a:hover{color:var(--accent);}
+.footer-copy{color:var(--muted);font-size:0.75rem;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 1rem;}
+  .nav-search input{width:130px;}
+  .hero{padding:0 1rem 2rem;}
+  .genre-row{padding:1rem 1rem 0;}
+  .section{padding:0 1rem;}
+  .main-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));padding:0 1rem 1.5rem;gap:0.7rem;}
+  .ad-slot{margin:1rem;}
+  footer{padding:1.5rem 1rem;}
+  .nf-card{width:160px;}
+  .admin-body{padding:1rem;}
+  .admin-row{flex-direction:column;}
+}
+
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:0.9}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="logo" id="logoTap">Cook<span class="logo-text">World</span></div>
+  <div class="nav-right">
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="text" id="navSearch" placeholder="Search recipes…" onkeydown="if(event.key==='Enter')doSearch(this.value)">
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-pattern"></div><div class="hero-glow"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🍳 Global Kitchen</div>
+    <h1 class="hero-title" id="heroTitle">The World's Kitchen,<br><em>One Place.</em></h1>
+    <p class="hero-desc" id="heroDesc">Discover cooking videos from every country and culture — curated, clean, and endlessly delicious.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="doSearch('popular cooking recipes 2024')">▶ Browse Now</button>
+      <button class="btn-ghost" onclick="doSearch('quick easy cooking recipes')">⚡ Quick Meals</button>
+    </div>
+  </div>
+</section>
+
+<!-- TOP AD SLOT -->
+<div class="ad-slot" id="adSlotTop"></div>
+
+<!-- GENRE PILLS -->
+<div class="genre-row" id="genreRow">
+  <button class="genre-pill active" data-q="popular cooking recipes">🌍 All</button>
+  <button class="genre-pill" data-q="Italian cooking recipes">🇮🇹 Italian</button>
+  <button class="genre-pill" data-q="Chinese cooking recipes">🇨🇳 Chinese</button>
+  <button class="genre-pill" data-q="Mexican cooking recipes">🇲🇽 Mexican</button>
+  <button class="genre-pill" data-q="Japanese cooking recipes">🇯🇵 Japanese</button>
+  <button class="genre-pill" data-q="Korean cooking recipes">🇰🇷 Korean</button>
+  <button class="genre-pill" data-q="Thai cooking recipes">🇹🇭 Thai</button>
+  <button class="genre-pill" data-q="Middle Eastern cooking recipes">🫙 Middle East</button>
+  <button class="genre-pill" data-q="baking desserts recipes">🍰 Baking</button>
+  <button class="genre-pill" data-q="street food world recipes">🍢 Street Food</button>
+  <button class="genre-pill" data-q="vegetarian vegan recipes">🥗 Vegetarian</button>
+  <button class="genre-pill" data-q="quick easy 15 minute recipes">⚡ Quick</button>
+  <div class="genre-divider"></div>
+  <span class="genre-label">🇮🇳 India:</span>
+  <button class="genre-pill" data-q="North Indian cooking recipes">🫓 North Indian</button>
+  <button class="genre-pill" data-q="South Indian cooking recipes">🍛 South Indian</button>
+  <button class="genre-pill" data-q="Punjabi cooking recipes">🧆 Punjabi</button>
+  <button class="genre-pill" data-q="Bengali cooking recipes">🐟 Bengali</button>
+  <button class="genre-pill" data-q="Gujarati cooking recipes">🥘 Gujarati</button>
+  <button class="genre-pill" data-q="Rajasthani cooking recipes">🏜️ Rajasthani</button>
+  <button class="genre-pill" data-q="Maharashtrian cooking recipes">🥙 Maharashtrian</button>
+  <button class="genre-pill" data-q="Kerala cooking recipes">🥥 Kerala</button>
+  <button class="genre-pill" data-q="Tamil Nadu cooking recipes">🍚 Tamil</button>
+  <button class="genre-pill" data-q="Hyderabadi biryani recipes">🍖 Hyderabadi</button>
+  <button class="genre-pill" data-q="Kashmiri wazwan cooking">🏔️ Kashmiri</button>
+  <button class="genre-pill" data-q="Goan seafood recipes">🦐 Goan</button>
+  <button class="genre-pill" data-q="street food India chaat">🍡 Indian Street</button>
+  <div class="genre-divider"></div>
+  <select class="lang-select" onchange="setLang(this.value)">
+    <option value="">🌍 All Languages</option>
+    <optgroup label="🇮🇳 Indian">
+      <option value="hi">Hindi</option>
+      <option value="ta">Tamil</option>
+      <option value="te">Telugu</option>
+      <option value="kn">Kannada</option>
+      <option value="ml">Malayalam</option>
+      <option value="mr">Marathi</option>
+      <option value="bn">Bengali</option>
+      <option value="gu">Gujarati</option>
+      <option value="pa">Punjabi</option>
+    </optgroup>
+    <optgroup label="🌍 World">
+      <option value="en">English</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="ja">Japanese</option>
+      <option value="ar">Arabic</option>
+      <option value="pt">Portuguese</option>
+      <option value="ko">Korean</option>
+      <option value="zh">Chinese</option>
+    </optgroup>
+  </select>
+</div>
+
+<!-- SHELVES -->
+<div id="shelvesContainer"></div>
+
+<!-- MID AD SLOT -->
+<div class="ad-slot" id="adSlotMid"></div>
+
+<!-- SECTION HEADER -->
+<div style="max-width:100%;padding:0.5rem 2.5rem 0.8rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+  <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;" id="gridLabel">All Cooking Videos</div>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <span style="color:var(--muted);font-size:0.8rem;" id="pageInfo"></span>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-grid" id="mainGrid">
+  <div class="loading-state"><div class="spinner"></div><p style="margin-top:0.5rem;font-size:0.85rem">Loading recipes from around the world…</p></div>
+</div>
+
+<!-- PAGINATION -->
+<div class="pagination" id="pagination"></div>
+
+<!-- BOTTOM AD SLOT -->
+<div class="ad-slot" id="adSlotBottom"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CookWorld</div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="sitemap.xml">Sitemap</a>
+    <a href="mailto:privacy@cookworld.vercel.app">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 CookWorld · All videos hosted on YouTube</div>
+</footer>
+
+<!-- VIDEO MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleModalClick(event)">
+  <div class="modal-box">
+    <div class="modal-video"><iframe id="modalIframe" allowfullscreen allow="autoplay;encrypted-media"></iframe></div>
+    <div class="modal-body">
+      <div class="modal-top">
+        <div class="modal-title" id="modalTitle"></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-meta">
+        <span class="modal-channel" id="modalChannel"></span>
+        <a class="yt-link" id="modalYtLink" target="_blank" rel="noopener">▶ YouTube</a>
+      </div>
+      <div class="modal-stores" id="modalStores"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminLoginModal">
+  <div class="login-box">
+    <h3>🔐 Admin Access</h3>
+    <p>Enter your admin credentials to manage CookWorld</p>
+    <input type="email" id="adminEmail" placeholder="Admin email">
+    <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')adminLogin()">
+    <button class="admin-btn" onclick="adminLogin()">Sign In</button>
+    <div class="login-error" id="loginError"></div>
+    <span class="login-cancel" onclick="hideLoginModal()">Cancel</span>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="admin-title">⚡ CookWorld Admin Panel</div>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+      <button class="admin-btn admin-btn-red" onclick="adminLogout()" style="padding:0.35rem 0.75rem;font-size:0.75rem;">Sign Out</button>
+      <button class="admin-close" onclick="document.getElementById('adminPanel').style.display='none'">✕</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="admin-tabs">
+    <div class="admin-tab active" onclick="switchTab('api')">📺 API Keys</div>
+    <div class="admin-tab" onclick="switchTab('ads')">💰 AdSense</div>
+    <div class="admin-tab" onclick="switchTab('site')">🎨 Customise</div>
+    <div class="admin-tab" onclick="switchTab('stats')">📊 Stats</div>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- API KEYS TAB -->
+    <div class="admin-section active" id="tab-api">
+      <div class="admin-label">YouTube API Keys (auto-rotates when quota runs out)</div>
+      <div class="key-list" id="keyList"></div>
+      <div class="admin-row">
+        <input class="admin-input" id="newKeyInput" placeholder="Paste new YouTube API key…">
+        <button class="admin-btn" onclick="addApiKey()">+ Add Key</button>
+      </div>
+      <div id="keyMsg"></div>
+      <div style="margin-top:1rem;">
+        <div class="admin-label">Current Active Key Index</div>
+        <div style="color:var(--accent);font-size:0.85rem;font-family:monospace;" id="activeKeyDisplay">—</div>
+      </div>
+      <div style="margin-top:1rem;">
+        <div class="admin-label">Pages of Videos (1–30)</div>
+        <div class="admin-row">
+          <input class="admin-input" id="maxPagesInput" type="number" min="1" max="30" placeholder="e.g. 30" style="max-width:120px;">
+          <button class="admin-btn" onclick="saveMaxPages()">Save</button>
+        </div>
+        <div style="color:var(--muted);font-size:0.75rem;margin-top:0.3rem;">Each page = 20 videos. 30 pages = 600 videos max.</div>
+      </div>
+    </div>
+
+    <!-- ADS TAB -->
+    <div class="admin-section" id="tab-ads">
+      <div style="margin-bottom:1.2rem;">
+        <div class="ad-toggle">
+          <label class="toggle-switch"><input type="checkbox" id="adTopToggle" onchange="toggleAd('top')"><span class="toggle-slider"></span></label>
+          <span style="font-size:0.85rem;font-weight:600;">Top Banner Ad</span>
+        </div>
+        <div class="admin-label">AdSense Code — Top Banner</div>
+        <textarea class="admin-textarea" id="adTopCode" placeholder="Paste your Google AdSense <ins> code here for the top banner ad slot…"></textarea>
+      </div>
+      <div style="margin-bottom:1.2rem;">
+        <div class="ad-toggle">
+          <label class="toggle-switch"><input type="checkbox" id="adMidToggle" onchange="toggleAd('mid')"><span class="toggle-slider"></span></label>
+          <span style="font-size:0.85rem;font-weight:600;">Mid Page Ad</span>
+        </div>
+        <div class="admin-label">AdSense Code — Mid Page</div>
+        <textarea class="admin-textarea" id="adMidCode" placeholder="Paste your Google AdSense <ins> code here for the mid page ad slot…"></textarea>
+      </div>
+      <div style="margin-bottom:1.2rem;">
+        <div class="ad-toggle">
+          <label class="toggle-switch"><input type="checkbox" id="adBottomToggle" onchange="toggleAd('bottom')"><span class="toggle-slider"></span></label>
+          <span style="font-size:0.85rem;font-weight:600;">Bottom Banner Ad</span>
+        </div>
+        <div class="admin-label">AdSense Code — Bottom Banner</div>
+        <textarea class="admin-textarea" id="adBottomCode" placeholder="Paste your Google AdSense <ins> code here for the bottom banner ad slot…"></textarea>
+      </div>
+      <div class="admin-row">
+        <button class="admin-btn admin-btn-green" onclick="saveAds()">💾 Save & Publish Ads</button>
+        <button class="admin-btn admin-btn-outline" onclick="previewAds()">👁 Preview</button>
+      </div>
+      <div id="adMsg"></div>
+      <div style="margin-top:1rem;padding:0.75rem;background:rgba(232,160,69,0.07);border-radius:8px;border:1px solid rgba(232,160,69,0.2);">
+        <div style="color:var(--accent);font-size:0.78rem;font-weight:600;margin-bottom:0.4rem;">💡 How to get AdSense code</div>
+        <div style="color:var(--muted);font-size:0.75rem;line-height:1.6;">1. Go to adsense.google.com → Ads → By ad unit<br>2. Create a Display ad → copy the full &lt;ins&gt; code<br>3. Paste it in the box above → Save & Publish<br>4. Ads go live on your site immediately — no redeploy needed!</div>
+      </div>
+    </div>
+
+    <!-- CUSTOMISE TAB -->
+    <div class="admin-section" id="tab-site">
+      <div class="admin-row">
+        <div style="flex:1">
+          <div class="admin-label">Site Name</div>
+          <input class="admin-input" id="siteNameInput" placeholder="CookWorld">
+        </div>
+        <div style="flex:1">
+          <div class="admin-label">Accent Colour</div>
+          <div style="display:flex;gap:0.4rem;align-items:center;">
+            <input type="color" id="accentColorInput" value="#e8a045" style="width:40px;height:36px;border:none;border-radius:6px;cursor:pointer;background:none;">
+            <input class="admin-input" id="accentColorHex" placeholder="#e8a045" style="flex:1;">
+          </div>
+        </div>
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div class="admin-label">Hero Title (HTML allowed)</div>
+        <input class="admin-input" style="width:100%" id="heroTitleInput" placeholder="The World's Kitchen, &lt;em&gt;One Place.&lt;/em&gt;">
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div class="admin-label">Hero Description</div>
+        <input class="admin-input" style="width:100%" id="heroDescInput" placeholder="Discover cooking videos from every country and culture…">
+      </div>
+      <div class="admin-row">
+        <button class="admin-btn admin-btn-green" onclick="saveSiteSettings()">💾 Save Changes</button>
+        <button class="admin-btn admin-btn-outline" onclick="previewSite()">👁 Preview Live</button>
+      </div>
+      <div id="siteMsg"></div>
+    </div>
+
+    <!-- STATS TAB -->
+    <div class="admin-section" id="tab-stats">
+      <div class="admin-stats" id="statsGrid">
+        <div class="stat-card"><div class="stat-num" id="statViews">—</div><div class="stat-label">Page Views Today</div></div>
+        <div class="stat-card"><div class="stat-num" id="statSearches">—</div><div class="stat-label">Searches Today</div></div>
+        <div class="stat-card"><div class="stat-num" id="statVideos">—</div><div class="stat-label">Videos Loaded</div></div>
+        <div class="stat-card"><div class="stat-num" id="statKeys">—</div><div class="stat-label">API Keys Active</div></div>
+        <div class="stat-card"><div class="stat-num" id="statPages">—</div><div class="stat-label">Max Pages Set</div></div>
+        <div class="stat-card"><div class="stat-num" id="statAds">—</div><div class="stat-label">Ad Slots Active</div></div>
+      </div>
+      <button class="admin-btn admin-btn-outline" onclick="refreshStats()">🔄 Refresh Stats</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+let YT_KEYS   = ['AIzaSyDiuMQxyEoOKpBf1cEdCdioqLucBlSbnDk'];
+let keyIndex  = 0;
+let currentLang = '';
+let currentQ    = 'popular cooking recipes';
+let currentPage = 1;
+let maxPages    = 30;
+let pageTokens  = [''];        // index 0 = page 1 token (empty)
+let totalVideosLoaded = 0;
+let searchCount = 0;
+let logoTapCount = 0;
+let logoTapTimer = null;
+let adStates = {top:false, mid:false, bottom:false};
+
+/* ════════════════════════════════════
+   SHELVES CONFIG
+════════════════════════════════════ */
+const SHELVES = [
+  {label:'Trending Today',        sub:'Most Watched',        q:'trending cooking recipes 2024'},
+  {label:'Indian Kitchen',        sub:'🇮🇳 Best of India',   q:'popular Indian cooking recipes'},
+  {label:'North Indian Flavours', sub:'🫓 Dal Roti & More',  q:'North Indian cooking recipes'},
+  {label:'South Indian Specials', sub:'🍛 Dosa Idli & More', q:'South Indian cooking Tamil Telugu'},
+  {label:'Punjabi Tadka',         sub:'🧆 Rich & Spicy',     q:'Punjabi dhaba cooking recipes'},
+  {label:'Bengali Kitchen',       sub:'🐟 Fish & Sweets',    q:'Bengali cooking recipes'},
+  {label:'Street Food India',     sub:'🍡 Chaat & Snacks',   q:'Indian street food chaat recipes'},
+  {label:'Quick & Easy',          sub:'⚡ Under 20 min',     q:'quick easy 15 minute recipes'},
+  {label:'Baking & Desserts',     sub:'🍰 Sweet Side',       q:'baking desserts recipes'},
+  {label:'Asian Flavours',        sub:'🥢 East Asia',        q:'Asian Chinese Japanese Korean cooking'},
+  {label:'World Street Food',     sub:'🍢 Globe Eats',       q:'street food world recipes'},
+];
+
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+window.addEventListener('load', () => {
+  setupPills();
+  setupLogoTap();
+  window.addEventListener('scroll', () =>
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60));
+  // wait for Firebase settings then init
+  setTimeout(() => {
+    if (window.__ytKeys && window.__ytKeys.length) YT_KEYS = window.__ytKeys;
+    renderShelves();
+    loadMainGrid(currentQ, 1);
+    trackPageView();
+  }, 1500);
+  document.getElementById('accentColorInput').addEventListener('input', e => {
+    document.getElementById('accentColorHex').value = e.target.value;
+    document.documentElement.style.setProperty('--accent', e.target.value);
+  });
+});
+
+/* ════════════════════════════════════
+   LOGO TAP SECRET (5 taps)
+════════════════════════════════════ */
+function setupLogoTap() {
+  document.getElementById('logoTap').addEventListener('click', () => {
+    logoTapCount++;
+    clearTimeout(logoTapTimer);
+    logoTapTimer = setTimeout(() => logoTapCount = 0, 2000);
+    if (logoTapCount >= 5) {
+      logoTapCount = 0;
+      if (window.__adminUser) {
+        document.getElementById('adminPanel').style.display = 'flex';
+      } else {
+        showLoginModal();
+      }
+    }
+  });
+}
+
+/* ════════════════════════════════════
+   ADMIN AUTH
+════════════════════════════════════ */
+function showLoginModal() {
+  document.getElementById('adminLoginModal').style.display = 'flex';
+  document.getElementById('loginError').textContent = '';
+}
+function hideLoginModal() {
+  document.getElementById('adminLoginModal').style.display = 'none';
+}
+async function adminLogin() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass  = document.getElementById('adminPass').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = 'Signing in…';
+  try {
+    const {signInWithEmailAndPassword, auth} = window.__fb;
+    await signInWithEmailAndPassword(auth, email, pass);
+    errEl.textContent = '';
+    document.getElementById('adminPanel').style.display = 'flex';
+  } catch(e) {
+    errEl.textContent = '❌ ' + (e.code === 'auth/invalid-credential' ? 'Wrong email or password' : e.message);
+  }
+}
+async function adminLogout() {
+  const {signOut, auth} = window.__fb;
+  await signOut(auth);
+  document.getElementById('adminPanel').style.display = 'none';
+}
+
+/* ════════════════════════════════════
+   ADMIN TABS
+════════════════════════════════════ */
+function switchTab(name) {
+  document.querySelectorAll('.admin-tab').forEach((t,i) => {
+    const tabs = ['api','ads','site','stats'];
+    t.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+/* ════════════════════════════════════
+   LOAD ADMIN DATA
+════════════════════════════════════ */
+async function loadAdminData() {
+  try {
+    const {db, doc, getDoc} = window.__fb;
+    const snap = await getDoc(doc(db,'settings','site'));
+    if (!snap.exists()) return;
+    const d = snap.data();
+    // Keys
+    if (d.ytKeys) {
+      YT_KEYS = d.ytKeys;
+      renderKeyList(d.ytKeys);
+      document.getElementById('activeKeyDisplay').textContent = `Key ${keyIndex+1} of ${YT_KEYS.length}`;
+      document.getElementById('statKeys').textContent = d.ytKeys.length;
+    }
+    // Pages
+    if (d.maxPages) {
+      maxPages = d.maxPages;
+      document.getElementById('maxPagesInput').value = d.maxPages;
+      document.getElementById('statPages').textContent = d.maxPages;
+    }
+    // Ads
+    if (d.adTop)    { document.getElementById('adTopCode').value = d.adTop; }
+    if (d.adMid)    { document.getElementById('adMidCode').value = d.adMid; }
+    if (d.adBottom) { document.getElementById('adBottomCode').value = d.adBottom; }
+    if (d.adTopOn    !== undefined) { document.getElementById('adTopToggle').checked    = d.adTopOn;    adStates.top    = d.adTopOn; }
+    if (d.adMidOn    !== undefined) { document.getElementById('adMidToggle').checked    = d.adMidOn;    adStates.mid    = d.adMidOn; }
+    if (d.adBottomOn !== undefined) { document.getElementById('adBottomToggle').checked = d.adBottomOn; adStates.bottom = d.adBottomOn; }
+    // Count active ads
+    const activeAds = [d.adTopOn, d.adMidOn, d.adBottomOn].filter(Boolean).length;
+    document.getElementById('statAds').textContent = activeAds;
+    // Site
+    if (d.siteName)  document.getElementById('siteNameInput').value  = d.siteName;
+    if (d.heroTitle) document.getElementById('heroTitleInput').value  = d.heroTitle;
+    if (d.heroDesc)  document.getElementById('heroDescInput').value   = d.heroDesc;
+    if (d.accentColor) {
+      document.getElementById('accentColorInput').value = d.accentColor;
+      document.getElementById('accentColorHex').value   = d.accentColor;
+    }
+  } catch(e){ console.warn('Admin data:', e); }
+}
+
+/* ════════════════════════════════════
+   API KEY MANAGEMENT
+════════════════════════════════════ */
+function renderKeyList(keys) {
+  document.getElementById('keyList').innerHTML = keys.map((k,i) => `
+    <div class="key-item">
+      <div class="key-item-active" style="background:${i===keyIndex?'#27ae60':'#8a8070'}"></div>
+      <div class="key-item-text">${k.substring(0,18)}…${k.slice(-4)}</div>
+      <span style="font-size:0.7rem;color:var(--muted);margin-right:0.3rem;">${i===keyIndex?'Active':''}</span>
+      <button class="key-item-del" onclick="removeKey(${i})">✕</button>
+    </div>`).join('');
+}
+
+async function addApiKey() {
+  const val = document.getElementById('newKeyInput').value.trim();
+  if (!val) return;
+  YT_KEYS.push(val);
+  document.getElementById('newKeyInput').value = '';
+  await saveKeys();
+  renderKeyList(YT_KEYS);
+  showMsg('keyMsg','✅ Key added!','admin-success');
+}
+
+async function removeKey(i) {
+  if (YT_KEYS.length <= 1) { showMsg('keyMsg','❌ Keep at least one key','admin-error'); return; }
+  YT_KEYS.splice(i,1);
+  if (keyIndex >= YT_KEYS.length) keyIndex = 0;
+  await saveKeys();
+  renderKeyList(YT_KEYS);
+  showMsg('keyMsg','✅ Key removed','admin-success');
+}
+
+async function saveKeys() {
+  try {
+    const {db, doc, setDoc} = window.__fb;
+    await setDoc(doc(db,'settings','site'), {ytKeys: YT_KEYS}, {merge:true});
+  } catch(e){ console.warn('Save keys:', e); }
+}
+
+async function saveMaxPages() {
+  const val = parseInt(document.getElementById('maxPagesInput').value) || 30;
+  maxPages = Math.min(30, Math.max(1, val));
+  try {
+    const {db, doc, setDoc} = window.__fb;
+    await setDoc(doc(db,'settings','site'), {maxPages}, {merge:true});
+    showMsg('keyMsg',`✅ Max pages set to ${maxPages}`,'admin-success');
+    document.getElementById('statPages').textContent = maxPages;
+  } catch(e){ showMsg('keyMsg','❌ Save failed','admin-error'); }
+}
+
+/* ════════════════════════════════════
+   ADS MANAGEMENT
+════════════════════════════════════ */
+function toggleAd(slot) {
+  adStates[slot] = document.getElementById(`ad${slot.charAt(0).toUpperCase()+slot.slice(1)}Toggle`).checked;
+  applyAdSlot(slot);
+}
+
+function applyAdSlot(slot) {
+  const slotEl = document.getElementById(`adSlot${slot.charAt(0).toUpperCase()+slot.slice(1)}`);
+  const code   = document.getElementById(`ad${slot.charAt(0).toUpperCase()+slot.slice(1)}Code`).value;
+  if (slotEl) slotEl.innerHTML = adStates[slot] ? code : '';
+}
+
+async function saveAds() {
+  const top    = document.getElementById('adTopCode').value;
+  const mid    = document.getElementById('adMidCode').value;
+  const bottom = document.getElementById('adBottomCode').value;
+  try {
+    const {db, doc, setDoc} = window.__fb;
+    await setDoc(doc(db,'settings','site'), {
+      adTop: top, adMid: mid, adBottom: bottom,
+      adTopOn: adStates.top, adMidOn: adStates.mid, adBottomOn: adStates.bottom
+    }, {merge:true});
+    // Apply live
+    ['top','mid','bottom'].forEach(applyAdSlot);
+    showMsg('adMsg','✅ Ads saved & published live!','admin-success');
+    // Re-run AdSense push
+    try{ (adsbygoogle=window.adsbygoogle||[]).push({}); }catch(e){}
+  } catch(e){ showMsg('adMsg','❌ Save failed: '+e.message,'admin-error'); }
+}
+
+function previewAds() {
+  ['top','mid','bottom'].forEach(applyAdSlot);
+  showMsg('adMsg','👁 Preview applied — check the page','admin-success');
+}
+
+/* ════════════════════════════════════
+   SITE CUSTOMISATION
+════════════════════════════════════ */
+async function saveSiteSettings() {
+  const siteName   = document.getElementById('siteNameInput').value;
+  const heroTitle  = document.getElementById('heroTitleInput').value;
+  const heroDesc   = document.getElementById('heroDescInput').value;
+  const accentColor= document.getElementById('accentColorHex').value || document.getElementById('accentColorInput').value;
+  // Apply live
+  if (siteName)    document.querySelectorAll('.logo-text').forEach(e=>e.textContent=siteName);
+  if (heroTitle)   document.getElementById('heroTitle').innerHTML = heroTitle;
+  if (heroDesc)    document.getElementById('heroDesc').textContent = heroDesc;
+  if (accentColor) document.documentElement.style.setProperty('--accent', accentColor);
+  try {
+    const {db, doc, setDoc} = window.__fb;
+    await setDoc(doc(db,'settings','site'), {siteName, heroTitle, heroDesc, accentColor}, {merge:true});
+    showMsg('siteMsg','✅ Changes saved & live!','admin-success');
+  } catch(e){ showMsg('siteMsg','❌ Save failed: '+e.message,'admin-error'); }
+}
+
+function previewSite() {
+  const siteName   = document.getElementById('siteNameInput').value;
+  const heroTitle  = document.getElementById('heroTitleInput').value;
+  const heroDesc   = document.getElementById('heroDescInput').value;
+  if (siteName)  document.querySelectorAll('.logo-text').forEach(e=>e.textContent=siteName);
+  if (heroTitle) document.getElementById('heroTitle').innerHTML = heroTitle;
+  if (heroDesc)  document.getElementById('heroDesc').textContent = heroDesc;
+  showMsg('siteMsg','👁 Preview applied!','admin-success');
+}
+
+/* ════════════════════════════════════
+   STATS
+════════════════════════════════════ */
+function refreshStats() {
+  document.getElementById('statSearches').textContent = searchCount;
+  document.getElementById('statVideos').textContent   = totalVideosLoaded;
+  document.getElementById('statKeys').textContent     = YT_KEYS.length;
+  document.getElementById('statPages').textContent    = maxPages;
+  const activeAds = Object.values(adStates).filter(Boolean).length;
+  document.getElementById('statAds').textContent = activeAds;
+}
+
+async function trackPageView() {
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    const {db, doc, getDoc, setDoc} = window.__fb;
+    const snap = await getDoc(doc(db,'stats', today));
+    const views = snap.exists() ? (snap.data().views||0)+1 : 1;
+    await setDoc(doc(db,'stats',today), {views}, {merge:true});
+    document.getElementById('statViews').textContent = views;
+  } catch(e){}
+}
+
+/* ════════════════════════════════════
+   YOUTUBE API — KEY ROTATION
+════════════════════════════════════ */
+function getKey() { return YT_KEYS[keyIndex] || YT_KEYS[0]; }
+
+function rotateKey() {
+  keyIndex = (keyIndex + 1) % YT_KEYS.length;
+  document.getElementById('activeKeyDisplay') &&
+    (document.getElementById('activeKeyDisplay').textContent = `Key ${keyIndex+1} of ${YT_KEYS.length}`);
+}
+
+/* ════════════════════════════════════
+   FETCH VIDEOS
+════════════════════════════════════ */
+async function fetchVideos(q, pageToken='', maxResults=20) {
+  const params = new URLSearchParams({
+    part:'snippet', q, type:'video',
+    maxResults, key: getKey(),
+    ...(currentLang && {relevanceLanguage: currentLang}),
+    ...(pageToken && {pageToken}),
+  });
+  const res  = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`);
+  const data = await res.json();
+  if (data.error) {
+    if (data.error.code === 403 && YT_KEYS.length > 1) {
+      rotateKey();
+      return fetchVideos(q, pageToken, maxResults); // retry with next key
+    }
+    throw new Error(data.error.message);
+  }
+  const nextToken = data.nextPageToken || '';
+  const items = (data.items||[]).filter(i=>i.id?.videoId);
+  // Get details
+  const ids = items.map(i=>i.id.videoId).join(',');
+  let details = {};
+  if (ids) {
+    const dr = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${getKey()}`);
+    const dd = await dr.json();
+    (dd.items||[]).forEach(v=>{details[v.id]=v;});
+  }
+  const videos = items.map(item => {
+    const vid=item.id.videoId, sn=item.snippet, det=details[vid]||{};
+    return { id:vid, title:sn.title, channel:sn.channelTitle,
+      thumb: sn.thumbnails?.high?.url||sn.thumbnails?.medium?.url||sn.thumbnails?.default?.url,
+      duration: parseDuration(det.contentDetails?.duration||''),
+      views: fmtViews(det.statistics?.viewCount||''),
+      country: detectCountry(sn.title) };
+  });
+  totalVideosLoaded += videos.length;
+  return {videos, nextToken};
+}
+
+/* ════════════════════════════════════
+   SHELVES
+════════════════════════════════════ */
+async function renderShelves() {
+  const container = document.getElementById('shelvesContainer');
+  container.innerHTML = '';
+  for (const shelf of SHELVES) {
+    const id = 'shelf_'+shelf.label.replace(/\W/g,'_');
+    const sec = document.createElement('div');
+    sec.className = 'section';
+    sec.innerHTML = `<div class="section-head"><span class="section-label">${shelf.label}</span><span class="section-sub">${shelf.sub}</span></div>
+      <div class="shelf" id="${id}">${skelCards(8)}</div>`;
+    container.appendChild(sec);
+    fetchVideos(shelf.q, '', 12).then(({videos}) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = videos.map((v,i)=>nfCard(v,i)).join('');
+    }).catch(()=>{});
+  }
+}
+
+/* ════════════════════════════════════
+   MAIN GRID (30 PAGES)
+════════════════════════════════════ */
+async function loadMainGrid(q, page=1) {
+  currentQ = q;
+  currentPage = page;
+  searchCount++;
+  document.getElementById('mainGrid').innerHTML =
+    `<div class="loading-state"><div class="spinner"></div><p style="margin-top:0.5rem;font-size:0.85rem">Loading page ${page} of ${maxPages}…</p></div>`;
+  document.getElementById('pagination').innerHTML = '';
+  try {
+    // Build page tokens up to the requested page
+    while (pageTokens.length < page) {
+      const prev = pageTokens[pageTokens.length-1];
+      const {nextToken} = await fetchVideos(q, prev, 1);
+      pageTokens.push(nextToken || '');
+      if (!nextToken) break;
+    }
+    const token = pageTokens[page-1] || '';
+    const {videos, nextToken} = await fetchVideos(q, token, 20);
+    // Save next token
+    if (nextToken && !pageTokens[page]) pageTokens[page] = nextToken;
+
+    document.getElementById('gridLabel').textContent =
+      q.replace(/recipes?/gi,'').replace(/cooking/gi,'').trim() + ' Videos';
+    document.getElementById('pageInfo').textContent =
+      `Page ${page} · ${videos.length} videos`;
+
+    if (!videos.length) {
+      document.getElementById('mainGrid').innerHTML =
+        `<div class="empty-state"><div style="font-size:2.5rem">🍳</div><p style="margin-top:0.75rem">No videos found. Try another search.</p></div>`;
+      return;
+    }
+    document.getElementById('mainGrid').innerHTML = videos.map((v,i)=>nfCard(v,i,true)).join('');
+    renderPagination(page, nextToken);
+  } catch(err) {
+    document.getElementById('mainGrid').innerHTML =
+      `<div class="empty-state"><div style="font-size:2rem">⚠️</div><p style="color:var(--accent);margin-top:0.5rem">${err.message}</p><p style="font-size:0.8rem;margin-top:0.4rem">Check your API key or wait for quota reset.</p></div>`;
+  }
+}
+
+function renderPagination(current, hasNext) {
+  const total = maxPages;
+  let html = '';
+  // Prev
+  html += `<button class="page-btn" onclick="loadMainGrid(currentQ,${current-1})" ${current<=1?'disabled':''}>← Prev</button>`;
+  // Page numbers (show window around current)
+  const start = Math.max(1, current-2);
+  const end   = Math.min(total, current+2);
+  if (start > 1) html += `<button class="page-btn" onclick="loadMainGrid(currentQ,1)">1</button>${start>2?'<span style="color:var(--muted);padding:0 0.3rem">…</span>':''}`;
+  for (let p = start; p <= end; p++) {
+    html += `<button class="page-btn ${p===current?'active':''}" onclick="loadMainGrid(currentQ,${p})">${p}</button>`;
+  }
+  if (end < total) html += `${end<total-1?'<span style="color:var(--muted);padding:0 0.3rem">…</span>':''}<button class="page-btn" onclick="loadMainGrid(currentQ,${total})">${total}</button>`;
+  // Next
+  html += `<button class="page-btn" onclick="loadMainGrid(currentQ,${current+1})" ${!hasNext||current>=total?'disabled':''}>Next →</button>`;
+  document.getElementById('pagination').innerHTML = html;
+  document.getElementById('mainGrid').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ════════════════════════════════════
+   CARD TEMPLATE
+════════════════════════════════════ */
+function nfCard(v, i, grid=false) {
+  const te = v.title.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+  const ce = v.channel.replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+  const stores = getStoreLinks(v.title);
+  return `
+  <div class="nf-card" onclick="openModal('${v.id}','${te}','${ce}')" style="animation-delay:${Math.min(i*0.04,0.5)}s">
+    <div class="nf-thumb">
+      <img src="${v.thumb}" alt="${te}" loading="lazy" onerror="this.src='https://placehold.co/320x180/242018/8a8070?text=🍳'">
+      ${v.duration?`<span class="nf-duration">${v.duration}</span>`:''}
+      <div class="nf-overlay">
+        <div class="nf-play">▶</div>
+        <div class="nf-overlay-title">${v.title}</div>
+        <div class="nf-overlay-meta">
+          ${v.country?`<span class="nf-tag">${v.country}</span>`:''}
+          ${v.views?`<span class="nf-views">${v.views} views</span>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="nf-info">
+      <div class="nf-title">${v.title}</div>
+      <div class="nf-channel"><div class="nf-dot"></div>${v.channel}</div>
+      <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-top:0.4rem;">${stores.slice(0,3).map(s=>`<a href="${s.url}" target="_blank" rel="noopener" class="ing-btn ing-${s.id}" onclick="event.stopPropagation()">${s.icon} ${s.name}</a>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+function skelCards(n) {
+  return Array.from({length:n}).map(()=>`
+    <div class="nf-card" style="pointer-events:none">
+      <div class="nf-thumb" style="background:var(--surface2);animation:pulse 1.5s ease infinite"></div>
+      <div class="nf-info">
+        <div style="height:9px;background:var(--surface2);border-radius:4px;margin-bottom:5px;animation:pulse 1.5s ease infinite"></div>
+        <div style="height:7px;background:var(--surface2);border-radius:4px;width:55%;animation:pulse 1.5s ease infinite"></div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════
+   STORE LINKS (Affiliate)
+════════════════════════════════════ */
+function getStoreLinks(title) {
+  const q = encodeURIComponent(title.split(' ').slice(0,4).join(' ') + ' ingredients');
+  return [
+    {id:'blinkit',   icon:'🟡', name:'Blinkit',   url:`https://blinkit.com/s/?q=${q}`},
+    {id:'zepto',     icon:'🟣', name:'Zepto',     url:`https://www.zeptonow.com/search?query=${q}`},
+    {id:'swiggy',    icon:'🟠', name:'Swiggy',    url:`https://www.swiggy.com/instamart/search?query=${q}`},
+    {id:'amazon',    icon:'🟡', name:'Amazon',    url:`https://www.amazon.in/s?k=${q}&tag=cookworld-21`},
+    {id:'bigbasket', icon:'🟢', name:'BigBasket', url:`https://www.bigbasket.com/ps/?q=${q}`},
+  ];
+}
+
+/* ════════════════════════════════════
+   MODAL
+════════════════════════════════════ */
+function openModal(id, title, channel) {
+  document.getElementById('modalIframe').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+  document.getElementById('modalTitle').textContent   = title;
+  document.getElementById('modalChannel').textContent = channel;
+  document.getElementById('modalYtLink').href = `https://www.youtube.com/watch?v=${id}`;
+  const stores = getStoreLinks(title);
+  document.getElementById('modalStores').innerHTML = stores.map(s =>
+    `<a href="${s.url}" target="_blank" rel="noopener" class="modal-store-btn ing-${s.id}">${s.icon} Order on ${s.name}</a>`).join('');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalIframe').src='';
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleModalClick(e) { if(e.target===document.getElementById('modal'))closeModal(); }
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ════════════════════════════════════
+   SEARCH / FILTER
+════════════════════════════════════ */
+function doSearch(q) {
+  const query = q || document.getElementById('navSearch').value.trim();
+  if (!query) return;
+  document.querySelectorAll('.genre-pill').forEach(b=>b.classList.remove('active'));
+  pageTokens = [''];
+  loadMainGrid(query.includes('recipe') ? query : query+' cooking recipe', 1);
+}
+
+function setLang(v) {
+  currentLang = v;
+  pageTokens = [''];
+  renderShelves();
+  loadMainGrid(currentQ, 1);
+}
+
+function setupPills() {
+  document.querySelectorAll('.genre-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.genre-pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      pageTokens = [''];
+      loadMainGrid(btn.dataset.q, 1);
+    });
+  });
+}
+
+/* ════════════════════════════════════
+   HELPERS
+════════════════════════════════════ */
+function showMsg(id, msg, cls) {
+  const el = document.getElementById(id);
+  if(!el)return;
+  el.textContent=msg;
+  el.className=cls;
+  setTimeout(()=>{ el.textContent=''; },3000);
+}
+
+function parseDuration(iso){
+  if(!iso)return'';
+  const m=iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if(!m)return'';
+  const h=parseInt(m[1]||0),min=parseInt(m[2]||0),s=parseInt(m[3]||0);
+  return h?`${h}:${pad(min)}:${pad(s)}`:`${min}:${pad(s)}`;
+}
+function pad(n){return String(n).padStart(2,'0');}
+function fmtViews(n){
+  if(!n)return'';
+  const num=parseInt(n);
+  if(num>=1e6)return(num/1e6).toFixed(1)+'M';
+  if(num>=1e3)return Math.round(num/1e3)+'K';
+  return String(num);
+}
+function detectCountry(t){
+  const lo=t.toLowerCase();
+  const map=[
+    [/punjabi|dhaba|amritsari|sarson|makki/,'🧆 Punjabi'],
+    [/bengali|mishti|hilsa|rosogolla/,'🐟 Bengali'],
+    [/gujarati|dhokla|thepla|undhiyu/,'🥘 Gujarati'],
+    [/rajasthani|dal baati|laal maas/,'🏜️ Rajasthani'],
+    [/maharashtrian|vada pav|misal/,'🥙 Maharashtrian'],
+    [/kerala|appam|sadya|puttu/,'🥥 Kerala'],
+    [/tamil|sambar|rasam|chettinad/,'🍚 Tamil'],
+    [/hyderabadi|dum biryani|haleem/,'🍖 Hyderabadi'],
+    [/kashmiri|wazwan|rogan josh/,'🏔️ Kashmiri'],
+    [/goan|vindaloo|sorpotel/,'🦐 Goan'],
+    [/south indian|dosa|idli|vada|upma/,'🍛 South Indian'],
+    [/north indian|paneer|naan|butter chicken/,'🫓 North Indian'],
+    [/biryani|masala|curry|chaat|samosa/,'🇮🇳 Indian'],
+    [/italian|pasta|pizza|risotto/,'🇮🇹 Italian'],
+    [/chinese|wok|dumpling|dim sum/,'🇨🇳 Chinese'],
+    [/mexican|taco|burrito|guacamole/,'🇲🇽 Mexican'],
+    [/japanese|sushi|ramen|miso/,'🇯🇵 Japanese'],
+    [/korean|kimchi|bibimbap/,'🇰🇷 Korean'],
+    [/thai|pad thai|tom yum/,'🇹🇭 Thai'],
+    [/french|croissant|soufflé/,'🇫🇷 French'],
+    [/arabic|lebanese|hummus|falafel/,'🫙 Middle Eastern'],
+  ];
+  for(const[re,f]of map)if(re.test(lo))return f;
+  return'';
+}
+</script>
+</body>
+</html>
